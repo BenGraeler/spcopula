@@ -1,0 +1,66 @@
+
+R version 3.3.1 (2016-06-21) -- "Bug in Your Hair"
+Copyright (C) 2016 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library("spcopula")
+Loading required package: copula
+Loading required package: VineCopula
+> data("spCopDemo")
+> calcKTauPol <- fitCorFun(bins, degree=3)
+
+Call:
+lm(formula = lagCor ~ poly(meanDists, degree), data = bins)
+
+Coefficients:
+             (Intercept)  poly(meanDists, degree)1  poly(meanDists, degree)2  
+                 0.20756                  -0.58268                   0.16262  
+poly(meanDists, degree)3  
+                -0.02181  
+
+Sum of squared residuals: 0.006621988 
+> 
+> spCop <- spCopula(components=list(normalCopula(), tCopula(),
++                                   frankCopula(), normalCopula(), claytonCopula(),
++                                   claytonCopula(), claytonCopula(), claytonCopula(),
++                                   claytonCopula(), indepCopula()),
++                   distances=bins$meanDists,
++                   spDepFun=calcKTauPol, unit="m")
+The parameters of the components will be recalculated according to the provided spDepFun where possible. 
+In case no 1-1 relation is known, the copula as in components is used. 
+> 
+> 
+> invdduCopula(0.5, spCop, 0.3, h=300)
+invdduCopula is numerically evalauted.
+[1] 0.3232382
+> invddvCopula(0.5, spCop, 0.3, h=300)
+invddvCopula is numerically evalauted.
+[1] 0.3232382
+> 
+> y <- dduCopula(c(0.3,0.7), spCop, h=300)
+> invdduCopula(0.3, spCop, y, h=300)
+invdduCopula is numerically evalauted.
+[1] 0.6999957
+> 
+> y <- ddvCopula(c(0.3,0.7), spCop, h=300)
+> invddvCopula(0.7, spCop, y, h=300)
+invddvCopula is numerically evalauted.
+[1] 0.3000046
+> 
+> 
+> 
+> proc.time()
+   user  system elapsed 
+   2.07    0.18    2.28 

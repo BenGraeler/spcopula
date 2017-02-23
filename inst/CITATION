@@ -1,0 +1,19 @@
+citHeader("To cite package 'spcopula' in publications use:")
+
+vers <- paste("R package version", meta$Version)
+
+citEntry(entry="Article",
+	title = "Modelling Skewed Spatial Random Fields through the Spatial Vine Copula.",
+	author = personList(as.person("Benedikt Graeler")),
+	note = vers,
+	journal = "Spatial Statistics",
+	year = 2014,
+	volume = "",
+	pages = "",
+	url = "http://dx.doi.org/10.1016/j.spasta.2014.01.001",
+	issn = "2211-6753",
+	keywords = "spatial copula",
+	textVersion = paste("Graeler, B. (2014): Modelling Skewed Spatial Random Fields through the Spatial Vine Copula.",
+	"Spatial Statistics, Elsevier (in press, available online).",
+	"DOI: 10.1016/j.spasta.2014.01.001)")
+)

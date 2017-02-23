@@ -1,0 +1,59 @@
+
+R version 3.3.1 (2016-06-21) -- "Bug in Your Hair"
+Copyright (C) 2016 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library("spcopula")
+Loading required package: copula
+Loading required package: VineCopula
+> spCopT0 <- spCopula(components=list(claytonCopula(8), claytonCopula(4), 
++                                     claytonCopula(2), claytonCopula(1),
++                                     claytonCopula(0.5), indepCopula()),
++                     distances=c(100,200,300,400,500,600),
++                     unit="km")
+> spCopT1 <- spCopula(components=list(claytonCopula(4), claytonCopula(2), 
++                                     claytonCopula(1), claytonCopula(0.5),
++                                     indepCopula()),
++                     distances=c(100,200,300,400,500),
++                     unit="km")
+> spCopT2 <- spCopula(components=list(claytonCopula(2), claytonCopula(1), 
++                                     claytonCopula(0.5), indepCopula()),
++                     distances=c(100,200,300,400),
++                     unit="km")
+> 
+> stCop <- stCopula(components=list(spCopT0, spCopT1, spCopT2),
++                   tlags=-(0:2))
+> 
+> invdduCopula(0.5, stCop, 0.3, h=matrix(c(150,-1),ncol=2))
+invdduCopula is numerically evalauted.
+[1] 0.4276335
+> invddvCopula(0.5, stCop, 0.3, h=matrix(c(150,-1),ncol=2))
+invdduCopula is numerically evalauted.
+[1] 0.4276335
+> 
+> y <- dduCopula(c(0.3,0.7), stCop, h=matrix(c(150,-1),ncol=2))
+> invdduCopula(0.3, stCop, y, h=matrix(c(150,-1),ncol=2))
+invdduCopula is numerically evalauted.
+[1] 0.7000111
+> 
+> y <- ddvCopula(c(0.3,0.7), stCop, h=matrix(c(150,-1),ncol=2))
+> invddvCopula(0.7, stCop, y, h=matrix(c(150,-1),ncol=2))
+invdduCopula is numerically evalauted.
+[1] 0.3000123
+> 
+> 
+> proc.time()
+   user  system elapsed 
+   1.64    0.15    1.79 

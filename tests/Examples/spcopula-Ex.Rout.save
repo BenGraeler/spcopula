@@ -1,0 +1,2468 @@
+
+R version 3.3.2 (2016-10-31) -- "Sincere Pumpkin Patch"
+Copyright (C) 2016 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "spcopula"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> options(pager = "console")
+> library('spcopula')
+Loading required package: copula
+Loading required package: VineCopula
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("EU_RB")
+> ### * EU_RB
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: EU_RB
+> ### Title: Daily mean PM10 concentrations over Europe in June and July 2005
+> ### Aliases: EU_RB
+> ### Keywords: datasets
+> 
+> ### ** Examples
+> 
+> data("EU_RB")
+> str(EU_RB)
+Formal class 'STFDF' [package "spacetime"] with 4 slots
+  ..@ data   :'data.frame':	11834 obs. of  2 variables:
+  .. ..$ PM10: num [1:11834] 14 9.7 7.8 21.9 11.2 9 11 6.1 7.4 7.4 ...
+  .. ..$ EMEP: num [1:11834] 11.62 5.02 3.94 3.82 7.01 ...
+  ..@ sp     :Formal class 'SpatialPointsDataFrame' [package "sp"] with 5 slots
+  .. .. ..@ data       :'data.frame':	194 obs. of  1 variable:
+  .. .. .. ..$ station_altitude: int [1:194] 525 581 918 560 172 117 665 1137 330 330 ...
+  .. .. ..@ coords.nrs : num(0) 
+  .. .. ..@ coords     : num [1:194, 1:2] 4592866 4761515 4658756 4690954 4799839 ...
+  .. .. .. ..- attr(*, "dimnames")=List of 2
+  .. .. .. .. ..$ : NULL
+  .. .. .. .. ..$ : chr [1:2] "coords.x1" "coords.x2"
+  .. .. ..@ bbox       : num [1:2, 1:2] 2749697 1647732 6412269 4604814
+  .. .. .. ..- attr(*, "dimnames")=List of 2
+  .. .. .. .. ..$ : chr [1:2] "coords.x1" "coords.x2"
+  .. .. .. .. ..$ : chr [1:2] "min" "max"
+  .. .. ..@ proj4string:Formal class 'CRS' [package "sp"] with 1 slot
+  .. .. .. .. ..@ projargs: chr " +proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +ellps=GRS80 +units=m +no_defs"
+  ..@ time   :An 'xts' object on 2005-06-01/2005-07-31 containing:
+  Data: int [1:61, 1] 5266 5267 5268 5269 5270 5271 5272 5273 5274 5275 ...
+ - attr(*, "dimnames")=List of 2
+  ..$ : NULL
+  ..$ : chr "..1"
+  Indexed by objects of class: [POSIXct,POSIXt] TZ: GMT
+  xts Attributes:  
+ NULL
+  ..@ endTime: POSIXct[1:61], format: "2005-06-02 02:00:00" "2005-06-03 02:00:00" ...
+> 
+> 
+> 
+> cleanEx()
+> nameEx("EU_RB_2005")
+> ### * EU_RB_2005
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: EU_RB_2005
+> ### Title: Daily mean PM10 concentrations over Europe in 2005 as used in
+> ###   the JSS manuscript
+> ### Aliases: EU_RB_2005
+> ### Keywords: datasets
+> 
+> ### ** Examples
+> 
+> data("EU_RB_2005")
+> str(EU_RB_2005)
+Formal class 'STFDF' [package "spacetime"] with 4 slots
+  ..@ data   :'data.frame':	70810 obs. of  3 variables:
+  .. ..$ PM10         : num [1:70810] 28 7 11.9 12.9 14.6 30 31.1 8.4 37.8 37.8 ...
+  .. ..$ EMEP         : num [1:70810] 6.36 4.13 5.84 4.93 5.86 ...
+  .. ..$ logResidKrige: num [1:70810] 12.8 12.4 10.6 11.6 17.1 ...
+  ..@ sp     :Formal class 'SpatialPointsDataFrame' [package "sp"] with 5 slots
+  .. .. ..@ data       :'data.frame':	194 obs. of  8 variables:
+  .. .. .. ..$ station_altitude     : int [1:194] 525 581 918 560 172 117 665 1137 330 330 ...
+  .. .. .. ..$ station_european_code: Factor w/ 7734 levels "AD0942A","AD0944A",..: 12 61 112 69 73 14 194 184 23 25 ...
+  .. .. .. ..$ country_iso_code     : Factor w/ 39 levels "AD","AL","AT",..: 3 3 3 3 3 3 3 3 3 3 ...
+  .. .. .. ..$ station_start_date   : Factor w/ 2344 levels "1900-01-01","1951-04-01",..: 1117 377 296 411 649 134 658 429 672 684 ...
+  .. .. .. ..$ station_end_date     : Factor w/ 811 levels "","1900-01-01",..: 1 1 1 1 1 1 1 1 1 736 ...
+  .. .. .. ..$ type_of_station      : Factor w/ 5 levels "","Background",..: 2 2 2 2 2 2 2 2 2 2 ...
+  .. .. .. ..$ station_type_of_area : Factor w/ 5 levels "","rural","suburban",..: 2 2 2 2 2 2 2 2 2 2 ...
+  .. .. .. ..$ street_type          : Factor w/ 5 levels "","Canyon street: L/H < 1.5",..: 1 1 5 4 4 1 4 1 2 1 ...
+  .. .. ..@ coords.nrs : num(0) 
+  .. .. ..@ coords     : num [1:194, 1:2] 4592866 4761515 4658756 4690954 4799839 ...
+  .. .. .. ..- attr(*, "dimnames")=List of 2
+  .. .. .. .. ..$ : NULL
+  .. .. .. .. ..$ : chr [1:2] "coords.x1" "coords.x2"
+  .. .. ..@ bbox       : num [1:2, 1:2] 2749697 1647732 6412269 4604814
+  .. .. .. ..- attr(*, "dimnames")=List of 2
+  .. .. .. .. ..$ : chr [1:2] "coords.x1" "coords.x2"
+  .. .. .. .. ..$ : chr [1:2] "min" "max"
+  .. .. ..@ proj4string:Formal class 'CRS' [package "sp"] with 1 slot
+  .. .. .. .. ..@ projargs: chr " +proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000 +ellps=GRS80 +units=m +no_defs"
+  ..@ time   :An 'xts' object on 2005-01-01/2005-12-31 containing:
+  Data: int [1:365, 1] 5115 5116 5117 5118 5119 5120 5121 5122 5123 5124 ...
+ - attr(*, "dimnames")=List of 2
+  ..$ : NULL
+  ..$ : chr "..1"
+  Indexed by objects of class: [POSIXct,POSIXt] TZ: GMT
+  xts Attributes:  
+ NULL
+  ..@ endTime: POSIXct[1:365], format: "2005-01-02 01:00:00" "2005-01-03 01:00:00" ...
+> 
+> 
+> 
+> cleanEx()
+> nameEx("asCopula-class")
+> ### * asCopula-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: asCopula-class
+> ### Title: Class '"asCopula"'
+> ### Aliases: asCopula-class dduCopula,matrix,asCopula-method
+> ###   dduCopula,numeric,asCopula-method ddvCopula,matrix,asCopula-method
+> ###   ddvCopula,numeric,asCopula-method fitCopula,asCopula-method
+> ###   invdduCopula,numeric,asCopula,numeric-method
+> ###   invddvCopula,numeric,asCopula,numeric-method
+> ### Keywords: classes asymmetric copula copula
+> 
+> ### ** Examples
+> 
+> showClass("asCopula")
+Class "asCopula" [package "spcopula"]
+
+Slots:
+                                                                       
+Name:     dimension   parameters  param.names param.lowbnd  param.upbnd
+Class:      integer      numeric    character      numeric      numeric
+                   
+Name:      fullname
+Class:    character
+
+Extends: 
+Class "copula", directly
+Class "parCopula", by class "copula", distance 2
+Class "Copula", by class "copula", distance 3
+> 
+> 
+> 
+> cleanEx()
+> nameEx("asCopula")
+> ### * asCopula
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: asCopula
+> ### Title: Constructor of an asymmetric copula with cubic and quadratic
+> ###   sections (Nelsen 2006).
+> ### Aliases: asCopula
+> ### Keywords: asymmetric copula cubic quadratic sections
+> 
+> ### ** Examples
+> 
+> cop <- asCopula(c(-2.1,0.8))
+> cop
+asymmetric copula, dim. d = 2 
+Dimension:  2 
+Parameters:
+  a   = -2.1
+  b   =  0.8
+> 
+> smpl <- rCopula(100, cop)
+> 
+> par(mfrow=c(2,2), mai=c(0.4,0.4,0.4,0.4))
+> plot(smpl,asp=1, main="sample")
+> persp(cop, dCopula, asp=1, main="density")
+> 
+> contour(cop, pCopula, asp=1, main="CDF")
+> points(rCopula_y(0.4, cop, 10), col="red")
+> 
+> copFit <- fitCopula(cop, smpl)
+> tau(cop)
+[1] 0.01897778
+> rho(cop)
+[1] 0.025
+> lambda(cop)
+lower upper 
+    0     0 
+> 
+> # too few points, but faster for package compilation
+> kenCop <- getKendallDistr(cop, smpl)
+> curve(kenCop, main="Kendall function", asp=1)
+> 
+> 
+> 
+> graphics::par(get("par.postscript", pos = 'CheckExEnv'))
+> cleanEx()
+> nameEx("bivTailDepFun")
+> ### * bivTailDepFun
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: bivJointDepFun
+> ### Title: Bivariate joint dependence functions
+> ### Aliases: bivJointDepFun lowerBivJointDepFun upperBivJointDepFun
+> ###   empBivJointDepFun lowerEmpBivJointDepFun upperEmpBivJointDepFun
+> 
+> ### ** Examples
+> 
+> library("VineCopula")
+> data("simulatedTriples")
+> X <- rankTransform(triples[,c(1,3)])
+>   
+> tdfEmp <- empBivJointDepFun(X)
+> plot(tdfEmp,ylim=c(0,1),
++      ylab="tail dependence index")  
+> abline(v=0.5, col="grey")
+> 
+> smplTau <- cor(X,method="kendall")[1,2]
+> 
+> # Gauss
+> tdfGauss <- bivJointDepFun(normalCopula(sin(smplTau*pi/2)))
+> curve(tdfGauss,add=TRUE,col="blue")
+> 
+> # survival Gumbel
+> tdfGumbel <- bivJointDepFun(surGumbelCopula(1/(1-smplTau)))
+> curve(tdfGumbel,add=TRUE,col="darkgreen")
+> 
+> # survival BB6 copula
+> tdfBB6 <- bivJointDepFun(surBB6Copula(c(4.65,2.28)))
+> curve(tdfBB6,add=TRUE,col="red")
+> 
+> legend("bottomleft",c("empircal","Gauss","surv. Gumbel","surv. BB6"),
++        col=c("black","blue","darkgreen","red"),lty=1)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("calcBins")
+> ### * calcBins
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: calcBins
+> ### Title: A function calculating the spatial/spatio-temporal bins
+> ### Aliases: calcBins calcBins-methods calcBins,Spatial-method
+> ###   calcBins,STFDF-method
+> ### Keywords: spatial preparation spatio-temporal preparation
+> 
+> ### ** Examples
+> 
+> library("sp")
+> data("meuse")
+> coordinates(meuse) = ~x+y
+> meuse$rtZinc <- rank(meuse$zinc)/(length(meuse)+1)
+> 
+> ## lag classes ##
+> bins <- calcBins(meuse, var="rtZinc", nbins=10, cutoff=800)
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:sp'
+
+> nameEx("composeSpCopula")
+> ### * composeSpCopula
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: composeSpCopula
+> ### Title: Composing a bivariate Spatial Copula
+> ### Aliases: composeSpCopula
+> ### Keywords: spatial multivariate distribution
+> 
+> ### ** Examples
+> 
+> composeSpCopula(c(1,1,2,3),families=list(frankCopula(.4), gumbelCopula(1.6),gumbelCopula(1.4)),
++                 bins=data.frame(meanDists=c(500,1000,1500,2000,2500)),range=2250)
+Spatial Copula: distance dependent convex combination of bivariate copulas 
+Dimension:  2 
+Copulas:
+   Frank copula at 500 [m] 
+   Frank copula at 1000 [m] 
+   Gumbel copula at 1500 [m] 
+   Gumbel copula at 2000 [m] 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("condCovariate")
+> ### * condCovariate
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: condCovariate
+> ### Title: Conditioning of a Covariate
+> ### Aliases: condCovariate
+> 
+> ### ** Examples
+> 
+> library("sp")
+> library("spacetime")
+> 
+> sp <- SpatialPoints(matrix(c(181000,181100,333500,333600),2))
+> time <- as.POSIXct("2014-03-18")+60*60*24*c(0,1,2)
+> data <- data.frame(var=runif(6))
+> data$coVar <- invdduCopula(data$var, gumbelCopula(7), runif(6)) 
+Numerical evaluation of invddu takes place.
+> 
+> stData <- STFDF(sp, time, data)
+> stQuerry <- STF(SpatialPoints(matrix(c(181000,181200,333600,333600),2)),
++                 time[2:3])
+> 
+> stNeigh <- getStNeighbours(stData=stData, ST=stQuerry, 
++                            spSize=3, tlags=-(0:1),
++                            var="var", coVar="coVar", prediction=TRUE)
+> 
+> condCovariate(stNeigh, function(x) gumbelCopula(7))
+[1] 2.558620e-05 5.677942e-09 6.178627e-02 1.765568e-01
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:spacetime', 'package:sp'
+
+> nameEx("condSpVine")
+> ### * condSpVine
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: condSpVine
+> ### Title: Conditions a spatial vine copula for conditional prediction
+> ### Aliases: condSpVine
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> library("VineCopula")
+> data("spCopDemo")
+> 
+> calcKTauPol <- fitCorFun(bins, degree=3)
+
+Call:
+lm(formula = lagCor ~ poly(meanDists, degree), data = bins)
+
+Coefficients:
+             (Intercept)  poly(meanDists, degree)1  poly(meanDists, degree)2  
+                 0.20756                  -0.58268                   0.16262  
+poly(meanDists, degree)3  
+                -0.02181  
+
+Sum of squared residuals: 0.006621988 
+> 
+> spCop <- spCopula(components=list(normalCopula(0), tCopula(0, dispstr = "un"),
++                                   frankCopula(1), normalCopula(0), claytonCopula(0),
++                                   claytonCopula(0), claytonCopula(0), claytonCopula(0),
++                                   claytonCopula(0), indepCopula()),
++                   distances=bins$meanDists,
++                   spDepFun=calcKTauPol, unit="m")
+The parameters of the components will be recalculated according to the provided spDepFun where possible. 
+In case no 1-1 relation is known, the copula as in components is used. 
+parameter at boundary ==> returning indepCopula()
+parameter at boundary ==> returning indepCopula()
+parameter at boundary ==> returning indepCopula()
+parameter at boundary ==> returning indepCopula()
+parameter at boundary ==> returning indepCopula()
+> 
+> spVineCop <- spVineCopula(spCop, vineCopula(4L))
+> 
+> dists <- list(c(473, 124, 116, 649))
+> condVar <- c(0.29, 0.55, 0.05, 0.41)
+> condDensity <- condSpVine(condVar,dists,spVineCop)
+> 
+> curve(condDensity)
+> mtext(paste("Dists:",paste(round(dists[[1]],0),collapse=", ")),line=0)
+> mtext(paste("Cond.:",paste(round(condVar,2),collapse=", ")),line=1)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("condStCoVarVine")
+> ### * condStCoVarVine
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: condStCoVarVine
+> ### Title: conditional distribution function of spatio-temporal covariate
+> ###   vine copula
+> ### Aliases: condStCoVarVine
+> 
+> ### ** Examples
+> 
+> library("VineCopula")
+> spCopT0 <- spCopula(components=list(claytonCopula(8), claytonCopula(4), 
++                                     claytonCopula(2), claytonCopula(1),
++                                     claytonCopula(0.5), indepCopula()),
++                     distances=c(100,200,300,400,500,600),
++                     unit="km")
+> spCopT1 <- spCopula(components=list(claytonCopula(4), claytonCopula(2), 
++                                     claytonCopula(1), claytonCopula(0.5),
++                                     indepCopula()),
++                     distances=c(100,200,300,400,500),
++                     unit="km")
+> spCopT2 <- spCopula(components=list(claytonCopula(2), claytonCopula(1), 
++                                     claytonCopula(0.5), indepCopula()),
++                     distances=c(100,200,300,400),
++                     unit="km")
+> 
+> stCop <- stCopula(components=list(spCopT0, spCopT1, spCopT2),
++                   tlags=-(0:2))
+> 
+> # only a constant copula ius used for the covariate
+> stCVVC <- stCoVarVineCopula(function(x) gumbelCopula(7), stCop, vineCopula(5L))
+> 
+> dists <- array(c(150, 250, 150, 250,0,0,-1,-1),dim=c(1,4,2))
+> condVar <- c(0.95, 0.29, 0.55, 0.05, 0.41)
+> 
+> condDensity <- condStCoVarVine(condVar, dists, stCVVC, c(1,1))
+> curve(condDensity)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("condStVine")
+> ### * condStVine
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: condStVine
+> ### Title: Conditions a spatio-temporal vine copula for conditional
+> ###   prediction
+> ### Aliases: condStVine
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> # a spatio-temporal C-vine copula (with independent copulas in the upper vine)
+> library("VineCopula")
+> 
+> spCopT0 <- spCopula(components=list(claytonCopula(8), claytonCopula(4), 
++                                     claytonCopula(2), claytonCopula(1),
++                                     claytonCopula(0.5), indepCopula()),
++                     distances=c(100,200,300,400,500,600),
++                     unit="km")
+> spCopT1 <- spCopula(components=list(claytonCopula(4), claytonCopula(2), 
++                                     claytonCopula(1), claytonCopula(0.5),
++                                     indepCopula()),
++                     distances=c(100,200,300,400,500),
++                     unit="km")
+> 
+> stCop <- stCopula(components=list(spCopT0, spCopT1),
++                   tlags=-(0:1))
+> 
+> stVineCop <- stVineCopula(stCop, vineCopula(4L))
+> 
+> dists <- array(c(150, 250, 150, 250,0,0,-1,-1),dim=c(1,4,2))
+> condVar <- c(0.29, 0.55, 0.05, 0.41)
+> 
+> condDensity <- condStVine(condVar,dists,stVineCop)
+> curve(condDensity)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("cqsCopula-class")
+> ### * cqsCopula-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: cqsCopula-class
+> ### Title: Class '"cqsCopula"'
+> ### Aliases: cqsCopula-class dduCopula,matrix,cqsCopula-method
+> ###   dduCopula,numeric,cqsCopula-method ddvCopula,matrix,cqsCopula-method
+> ###   ddvCopula,numeric,cqsCopula-method fitCopula,cqsCopula-method
+> ###   invdduCopula,numeric,cqsCopula,numeric-method
+> ###   invddvCopula,numeric,cqsCopula,numeric-method
+> ### Keywords: classes copula
+> 
+> ### ** Examples
+> 
+> showClass("cqsCopula")
+Class "cqsCopula" [package "spcopula"]
+
+Slots:
+                                                                       
+Name:         fixed    dimension   parameters  param.names param.lowbnd
+Class:    character      integer      numeric    character      numeric
+                                
+Name:   param.upbnd     fullname
+Class:      numeric    character
+
+Extends: 
+Class "copula", directly
+Class "parCopula", by class "copula", distance 2
+Class "Copula", by class "copula", distance 3
+> 
+> 
+> 
+> cleanEx()
+> nameEx("cqsCopula")
+> ### * cqsCopula
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: cqsCopula
+> ### Title: Constructor of a symmetric copula with cubic quadratic sections.
+> ### Aliases: cqsCopula
+> ### Keywords: copula cubic quadratic sections
+> 
+> ### ** Examples
+> 
+> cop <- cqsCopula(c(-2.1,0.8))
+> cop
+cubic-quadratic sections copula, dim. d = 2 
+Dimension:  2 
+Parameters:
+  a   = -2.1
+  b   =  0.8
+> 
+> smpl <- rCopula(100, cop)
+> 
+> par(mfrow=c(2,2), mai=c(0.4,0.4,0.4,0.4))
+> plot(smpl,asp=1, main="sample")
+> persp(cop, dCopula, asp=1, main="density")
+> 
+> contour(cop, pCopula, asp=1, main="CDF")
+> points(rCopula_y(0.4, cop, 10), col="red")
+> 
+> copFit <- fitCopula(cop, smpl)
+> tau(cop)
+[1] -0.02182222
+> rho(cop)
+[1] -0.025
+> lambda(cop)
+lower upper 
+    0     0 
+> 
+> # too few points, but faster for package compilation
+> kenCop <- getKendallDistr(cop, smpl)
+> curve(kenCop, main="Kendall function", asp=1)
+> 
+> 
+> 
+> graphics::par(get("par.postscript", pos = 'CheckExEnv'))
+> cleanEx()
+> nameEx("criticalLevel")
+> ### * criticalLevel
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: criticalLevel
+> ### Title: Calculating the critical level for a given Kendall Return Period
+> ### Aliases: criticalLevel
+> ### Keywords: survival multivariate
+> 
+> ### ** Examples
+> 
+> criticalLevel(getKendallDistr(frankCopula(.7)), KRP=c(10,100,1000))
+[1] 0.6244540 0.8801567 0.9620758
+> 
+> 
+> 
+> cleanEx()
+> nameEx("criticalPair")
+> ### * criticalPair
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: criticalPair
+> ### Title: Calculate Critical Pairs
+> ### Aliases: criticalPair
+> ### Keywords: ~kwd1 ~kwd2
+> 
+> ### ** Examples
+> 
+> v <- criticalPair(frankCopula(0.7), 0.9, u=.97, 1)
+> pCopula(c(0.97, v),frankCopula(0.7))
+[1] 0.9
+> 
+> 
+> 
+> cleanEx()
+> nameEx("criticalTriple")
+> ### * criticalTriple
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: criticalTriple
+> ### Title: calculate critical triples
+> ### Aliases: criticalTriple
+> ### Keywords: multivariate distribution
+> 
+> ### ** Examples
+> 
+> w <- criticalTriple(frankCopula(0.7,dim=3), 0.9, c(.97,.97), c(1,2))
+> 
+> # check the triple
+> pCopula(c(0.97, 0.97, w), frankCopula(0.7, dim=3))
+[1] 0.9
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("dduCopula")
+> ### * dduCopula
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: dduCopula
+> ### Title: partial derivatives of copulas
+> ### Aliases: dduCopula ddvCopula
+> ### Keywords: partial derivative conditional probabilities
+> 
+> ### ** Examples
+> 
+> ####################################
+> ## Asymmetric vs. Gaussian copula ##
+> ####################################
+> 
+> asCop <- asCopula(c(-2,1))
+> asCopSmpl <- rCopula(100,asCop)
+> 
+> unitScatter(smpl=asCopSmpl)
+> 
+> # conditional probabilities of an asymmetric copula given u
+> asGivenU <- dduCopula(asCopSmpl,asCop)
+> 
+> # vs. conditional probabilities of an asymmetric copula given v
+> asGivenV <- ddvCopula(asCopSmpl[,c(2,1)],asCop)
+> unitScatter(smpl=cbind(asGivenU, asGivenV))
+> 
+> normalCop <- normalCopula(.6)
+> normCopSmpl <- rCopula(100,normalCop)
+> 
+> unitScatter(smpl=normCopSmpl)
+> 
+> # conditional probabilities of a Gaussian copula given u
+> normGivenU <- dduCopula(normCopSmpl,normalCop)
+> 
+> # vs. conditional probabilities of a Gaussian copula given v
+> normGivenV <- ddvCopula(normCopSmpl[,c(2,1)],normalCop)
+> unitScatter(smpl=cbind(normGivenU, normGivenV))
+> 
+> 
+> 
+> cleanEx()
+> nameEx("dependencePlot")
+> ### * dependencePlot
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: dependencePlot
+> ### Title: Kernel smoothed scatter plot
+> ### Aliases: dependencePlot
+> ### Keywords: plot
+> 
+> ### ** Examples
+> 
+> ## Not run: dependencePlot(smpl=rCopula(500,asCopula(c(-1,1))))
+> 
+> 
+> 
+> cleanEx()
+> nameEx("empSurCopula-class")
+> ### * empSurCopula-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: empSurCopula-class
+> ### Title: Class '"empiricalCopula"'
+> ### Aliases: empSurCopula-class
+> ### Keywords: classes
+> 
+> ### ** Examples
+> 
+> showClass("empSurCopula")
+Class "empSurCopula" [package "spcopula"]
+
+Slots:
+                                                                       
+Name:        sample    dimension   parameters  param.names param.lowbnd
+Class:       matrix      integer      numeric    character      numeric
+                                
+Name:   param.upbnd     fullname
+Class:      numeric    character
+
+Extends: 
+Class "copula", directly
+Class "parCopula", by class "copula", distance 2
+Class "Copula", by class "copula", distance 3
+> 
+> 
+> 
+> cleanEx()
+> nameEx("empSurCopula")
+> ### * empSurCopula
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: empSurCopula
+> ### Title: Constructor of an empirical survival copula class
+> ### Aliases: empSurCopula
+> ### Keywords: multivariate
+> 
+> ### ** Examples
+> 
+> empCop <- empSurCopula(rCopula(500,frankCopula(0.7)))
+> str(empCop)
+Formal class 'empSurCopula' [package "spcopula"] with 7 slots
+  ..@ sample      : num [1:500, 1:2] 0.266 0.372 0.573 0.908 0.202 ...
+  ..@ dimension   : int 2
+  ..@ parameters  : num NA
+  ..@ param.names : chr "unknown"
+  ..@ param.lowbnd: num NA
+  ..@ param.upbnd : num NA
+  ..@ fullname    : chr "Unkown empirical survival copula based on a sample."
+> 
+> empCop <- empSurCopula(copula=frankCopula(0.7))
+Note: the survival copula will be empirically represented by a sample of size: 1e+05 
+> str(empCop)
+Formal class 'empSurCopula' [package "spcopula"] with 7 slots
+  ..@ sample      : num [1:100000, 1:2] 0.469 0.315 0.617 0.045 0.882 ...
+  ..@ dimension   : int 2
+  ..@ parameters  : num 0.7
+  ..@ param.names : chr "param"
+  ..@ param.lowbnd: num -Inf
+  ..@ param.upbnd : num Inf
+  ..@ fullname    : chr "Empirical survival copula derived from Frank copula"
+> 
+> empCop <- empSurCopula(rCopula(500,frankCopula(0.7)), frankCopula(0.7))
+> str(empCop)
+Formal class 'empSurCopula' [package "spcopula"] with 7 slots
+  ..@ sample      : num [1:500, 1:2] 0.8219 0.2413 0.0371 0.2891 0.7464 ...
+  ..@ dimension   : int 2
+  ..@ parameters  : num 0.7
+  ..@ param.names : chr "param"
+  ..@ param.lowbnd: num -Inf
+  ..@ param.upbnd : num Inf
+  ..@ fullname    : chr "Empirical survival copula derived from Frank copula"
+> 
+> # the empirical value
+> pCopula(c(0.3, 0.5), empCop)
+[1] 0.142
+> 
+> # the theoretical value
+> pCopula(c(0.3, 0.5), frankCopula(0.7))
+[1] 0.1682671
+> 
+> 
+> 
+> cleanEx()
+> nameEx("empiricalCopula-class")
+> ### * empiricalCopula-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: empiricalCopula-class
+> ### Title: Class '"empiricalCopula"'
+> ### Aliases: empiricalCopula-class
+> ### Keywords: classes
+> 
+> ### ** Examples
+> 
+> showClass("empiricalCopula")
+Class "empiricalCopula" [package "spcopula"]
+
+Slots:
+                                                                       
+Name:        sample    dimension   parameters  param.names param.lowbnd
+Class:       matrix      integer      numeric    character      numeric
+                                
+Name:   param.upbnd     fullname
+Class:      numeric    character
+
+Extends: 
+Class "copula", directly
+Class "parCopula", by class "copula", distance 2
+Class "Copula", by class "copula", distance 3
+> 
+> 
+> 
+> cleanEx()
+> nameEx("empiricalCopula")
+> ### * empiricalCopula
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: empiricalCopula
+> ### Title: Constructor of an empirical copula class
+> ### Aliases: empiricalCopula
+> ### Keywords: multivariate
+> 
+> ### ** Examples
+> 
+> empCop <- empiricalCopula(rCopula(500,frankCopula(0.7)))
+> str(empCop)
+Formal class 'empiricalCopula' [package "spcopula"] with 7 slots
+  ..@ sample      : num [1:500, 1:2] 0.266 0.372 0.573 0.908 0.202 ...
+  ..@ dimension   : int 2
+  ..@ parameters  : num NA
+  ..@ param.names : chr "unknown"
+  ..@ param.lowbnd: num NA
+  ..@ param.upbnd : num NA
+  ..@ fullname    : chr "Unkown empirical copula based on a sample."
+> 
+> empCop <- empiricalCopula(copula=frankCopula(0.7))
+Note: the copula will be empirically represented by a sample of size: 1e+05 
+> str(empCop)
+Formal class 'empiricalCopula' [package "spcopula"] with 7 slots
+  ..@ sample      : num [1:100000, 1:2] 0.531 0.685 0.383 0.955 0.118 ...
+  ..@ dimension   : int 2
+  ..@ parameters  : num 0.7
+  ..@ param.names : chr "param"
+  ..@ param.lowbnd: num -Inf
+  ..@ param.upbnd : num Inf
+  ..@ fullname    : chr "Empirical copula derived from Frank copula"
+> 
+> empCop <- empiricalCopula(rCopula(500,frankCopula(0.7)), frankCopula(0.7))
+> str(empCop)
+Formal class 'empiricalCopula' [package "spcopula"] with 7 slots
+  ..@ sample      : num [1:500, 1:2] 0.8219 0.2413 0.0371 0.2891 0.7464 ...
+  ..@ dimension   : int 2
+  ..@ parameters  : num 0.7
+  ..@ param.names : chr "param"
+  ..@ param.lowbnd: num -Inf
+  ..@ param.upbnd : num Inf
+  ..@ fullname    : chr "Empirical copula derived from Frank copula"
+> 
+> # the empirical value
+> pCopula(c(0.3, 0.5), empCop)
+[1] 0.156
+> 
+> # the theoretical value
+> pCopula(c(0.3, 0.5), frankCopula(0.7))
+[1] 0.1682671
+> 
+> 
+> 
+> cleanEx()
+> nameEx("fitCorFun")
+> ### * fitCorFun
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: fitCorFun
+> ### Title: Automated fitting of a correlation function to the correlogram
+> ### Aliases: fitCorFun
+> ### Keywords: correlogram spcopula
+> 
+> ### ** Examples
+> 
+> # a simplified bins object (from demo(spcopula))
+> bins <- list(meanDists=c(64, 128, 203, 281, 361, 442, 522, 602, 681, 760), 
++              lagCor=c(0.57,  0.49, 0.32, 0.29, 0.15, 0.14, 0.10, -0.00, 0.03, -0.01))
+> attr(bins,"cor.method") <- "kendall"
+> 
+> # plot the correlogram
+> plot(lagCor~meanDists,bins)
+> 
+> # fit and plot a linear model
+> calcKTauLin <- fitCorFun(bins, degree=1, cutoff=600)
+
+Call:
+lm(formula = lagCor ~ poly(meanDists, degree), data = bins)
+
+Coefficients:
+            (Intercept)  poly(meanDists, degree)  
+                 0.2943                  -0.4284  
+
+Sum of squared residuals: 0.01381904 
+> curve(calcKTauLin,0, 1000, col="red",add=TRUE)
+> 
+> # fit and plot a polynomial model
+> calcKTauPol <- fitCorFun(bins, degree=5)
+
+Call:
+lm(formula = lagCor ~ poly(meanDists, degree), data = bins)
+
+Coefficients:
+             (Intercept)  poly(meanDists, degree)1  poly(meanDists, degree)2  
+                0.208000                 -0.581940                  0.161524  
+poly(meanDists, degree)3  poly(meanDists, degree)4  poly(meanDists, degree)5  
+               -0.023774                  0.004097                  0.011434  
+
+Sum of squared residuals: 0.006503102 
+> curve(calcKTauPol,0, 1000, col="purple",add=TRUE)
+> 
+> 
+> 
+> cleanEx()
+> nameEx("fitSpCopula")
+> ### * fitSpCopula
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: fitSpCopula
+> ### Title: Spatial Copula Fitting
+> ### Aliases: fitSpCopula
+> ### Keywords: spatial multivariate distribution
+> 
+> ### ** Examples
+> 
+> # reload some spatial data
+> library("sp")
+> data("meuse")
+> coordinates(meuse) <- ~x+y
+> 
+> # drop margins
+> meuse$marZinc <- plnorm(meuse$zinc, mean(log(meuse$zinc)), sd(log(meuse$zinc)))
+> 
+> # load data from a provided binning
+> data("spCopDemo")
+> 
+> fitSpCopula(bins, meuse, 600)
+
+Call:
+lm(formula = lagCor ~ poly(meanDists, degree), data = bins)
+
+Coefficients:
+             (Intercept)  poly(meanDists, degree)1  poly(meanDists, degree)2  
+                0.294212                 -0.428150                  0.100339  
+poly(meanDists, degree)3  
+                0.007255  
+
+Sum of squared residuals: 0.003770511 
+Normal copula 
+  |                                                                              |                                                                      |   0%  |                                                                              |=======                                                               |  10%  |                                                                              |==============                                                        |  20%  |                                                                              |=====================                                                 |  30%  |                                                                              |============================                                          |  40%  |                                                                              |===================================                                   |  50%  |                                                                              |==========================================                            |  60%  |                                                                              |=================================================                     |  70%  |                                                                              |========================================================              |  80%  |                                                                              |===============================================================       |  90%  |                                                                              |======================================================================| 100%
+t-copula 
+  |                                                                              |                                                                      |   0%  |                                                                              |=======                                                               |  10%  |                                                                              |==============                                                        |  20%  |                                                                              |=====================                                                 |  30%  |                                                                              |============================                                          |  40%  |                                                                              |===================================                                   |  50%  |                                                                              |==========================================                            |  60%  |                                                                              |=================================================                     |  70%  |                                                                              |========================================================              |  80%  |                                                                              |===============================================================       |  90%  |                                                                              |======================================================================| 100%
+Clayton copula 
+  |                                                                              |                                                                      |   0%  |                                                                              |=======                                                               |  10%  |                                                                              |==============                                                        |  20%  |                                                                              |=====================                                                 |  30%  |                                                                              |============================                                          |  40%  |                                                                              |===================================                                   |  50%  |                                                                              |==========================================                            |  60%  |                                                                              |=================================================                     |  70%  |                                                                              |========================================================              |  80%  |                                                                              |===============================================================       |  90%  |                                                                              |======================================================================| 100%
+Frank copula 
+  |                                                                              |                                                                      |   0%  |                                                                              |=======                                                               |  10%  |                                                                              |==============                                                        |  20%  |                                                                              |=====================                                                 |  30%  |                                                                              |============================                                          |  40%  |                                                                              |===================================                                   |  50%  |                                                                              |==========================================                            |  60%  |                                                                              |=================================================                     |  70%  |                                                                              |========================================================              |  80%  |                                                                              |===============================================================       |  90%  |                                                                              |======================================================================| 100%
+Gumbel copula 
+  |                                                                              |                                                                      |   0%  |                                                                              |=======                                                               |  10%  |                                                                              |==============                                                        |  20%  |                                                                              |=====================                                                 |  30%  |                                                                              |============================                                          |  40%  |                                                                              |===================================                                   |  50%  |                                                                              |==========================================                            |  60%  |                                                                              |=================================================                     |  70%  |                                                                              |========================================================              |  80%  |                                                                              |===============================================================       |  90%  |                                                                              |======================================================================| 100%
+The parameters of the components will be recalculated according to the provided spDepFun where possible. 
+In case no 1-1 relation is known, the copula as in components is used. 
+Spatial Copula: distance dependent convex combination of bivariate copulas 
+Dimension:  2 
+Copulas:
+   Clayton copula at 64.3911 [m] 
+   t-copula at 128.1638 [m] 
+   Clayton copula at 202.6198 [m] 
+   Clayton copula at 280.8923 [m] 
+   Clayton copula at 361.0112 [m] 
+   Clayton copula at 441.5049 [m] 
+   Clayton copula at 521.9185 [m] 
+A spatial dependence function is used. 
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:sp'
+
+> nameEx("genEmpCop")
+> ### * genEmpCop
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: genEmpCop
+> ### Title: Generate an empirical copula
+> ### Aliases: genEmpCop genEmpSurCop
+> ### Keywords: multivariate
+> 
+> ### ** Examples
+> 
+> empCop <- genEmpCop(frankCopula(0.7), 500)
+Note: the copula will be empirically represented by a sample of size: 500 
+> 
+> # the empirical value
+> pCopula(c(0.3, 0.5), empCop)
+[1] 0.16
+> 
+> # the theoretical value
+> pCopula(c(0.3, 0.5), frankCopula(0.7))
+[1] 0.1682671
+> 
+> 
+> 
+> cleanEx()
+> nameEx("genEmpKenFun")
+> ### * genEmpKenFun
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: genEmpKenFun
+> ### Title: Generates an empirical Kendall distribution function
+> ### Aliases: genEmpKenFun
+> ### Keywords: multivariate distribution
+> 
+> ### ** Examples
+> 
+> empKenFun <- genEmpKenFun(frankCopula(0.7), rCopula(500, frankCopula(0.7)))
+> empKenFun(.9)
+[1] 0.994
+> 
+> 
+> 
+> cleanEx()
+> nameEx("genInvKenFun")
+> ### * genInvKenFun
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: genInvKenFun
+> ### Title: Generate the inverse Kendall distribution function
+> ### Aliases: genInvKenFun
+> ### Keywords: multivariate distribution
+> 
+> ### ** Examples
+> 
+> frankKenDistrFun <- getKendallDistr(frankCopula(.5))
+> frankInvKenDistrFun <- genInvKenFun(frankKenDistrFun)
+> 
+> frankInvKenDistrFun(.8)
+[1] 0.4648775
+> frankKenDistrFun(frankInvKenDistrFun(.8))
+[1] 0.8
+> 
+> 
+> 
+> cleanEx()
+> nameEx("getKendallDistr")
+> ### * getKendallDistr
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: getKendallDistr
+> ### Title: Retrieving the Kendall Distribution function for a given copula
+> ### Aliases: getKendallDistr getKendallDistr,claytonCopula-method
+> ###   getKendallDistr,frankCopula-method
+> ###   getKendallDistr,gumbelCopula-method getKendallDistr,BB1Copula-method
+> ###   getKendallDistr,BB6Copula-method getKendallDistr,BB7Copula-method
+> ###   getKendallDistr,BB8Copula-method getKendallDistr,joeBiCopula-method
+> ### Keywords: ~kwd1 ~kwd2
+> 
+> ### ** Examples
+> 
+> frankKenDistrFun <- getKendallDistr(frankCopula(.5))
+> frankKenDistrFun(.8)
+[1] 0.9739887
+> 
+> 
+> 
+> cleanEx()
+> nameEx("getNeighbours")
+> ### * getNeighbours
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: getNeighbours
+> ### Title: Creating Local Neighbourhoods
+> ### Aliases: getNeighbours
+> ### Keywords: spatial
+> 
+> ### ** Examples
+> 
+> library("sp")
+> spdf <- data.frame(x=c(112,154,212,289,345),y=c(124,198,85,168,346),measure=rlnorm(5))
+> coordinates(spdf) <- ~x+y
+> 
+> getNeighbours(spdf,size=4)
+A set of neighbourhoods consisting of 4 locations each 
+with 5 rows of observations for:
+measure 
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:sp'
+
+> nameEx("getStNeighbours")
+> ### * getStNeighbours
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: getStNeighbours
+> ### Title: Creating Local Spatio-Temporal Neighbourhoods
+> ### Aliases: getStNeighbours
+> ### Keywords: spatial
+> 
+> ### ** Examples
+> 
+> library("sp")
+> library("spacetime")
+> 
+> sp <- SpatialPoints(matrix(c(181000,181100,333500,333600),2))
+> time <- as.POSIXct("2014-03-18")+60*60*24*c(0,1,2)
+> data <- data.frame(measure=runif(6))
+> 
+> stData <- STFDF(sp, time, data)
+> stQuerry <- STF(SpatialPoints(matrix(c(181000,181200,333600,333600),2)),
++                 time[2:3])
+> 
+> getStNeighbours(stData=stData, ST=stQuerry, var="measure", spSize=3, 
++                 tlags=-(0:1), prediction=TRUE)
+A set of spatio-temporal neighbourhoods consisting of 5 locations each 
+with 4 rows of observations for:
+measure 
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:spacetime', 'package:sp'
+
+> nameEx("hkCopula-class")
+> ### * hkCopula-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: hkCopula-class
+> ### Title: Class '"hkCopula"'
+> ### Aliases: hkCopula-class
+> ### Keywords: classes
+> 
+> ### ** Examples
+> 
+> showClass("hkCopula")
+Class "hkCopula" [package "spcopula"]
+
+Slots:
+                                                                       
+Name:    nestingCop  clusterCops      kenFuns    dimension   parameters
+Class:       copula         list         list      integer      numeric
+                                                          
+Name:   param.names param.lowbnd  param.upbnd     fullname
+Class:    character      numeric      numeric    character
+
+Extends: 
+Class "copula", directly
+Class "parCopula", by class "copula", distance 2
+Class "Copula", by class "copula", distance 3
+> 
+> 
+> 
+> cleanEx()
+> nameEx("hkCopula")
+> ### * hkCopula
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: hkCopula
+> ### Title: Constructor of a hierarchical Kendall copula
+> ### Aliases: hkCopula
+> ### Keywords: asymmetric copula cubic quadratic sections
+> 
+> ### ** Examples
+> 
+> hkCop <- hkCopula(gumbelCopula(5),list(list(frankCopula(3), c(1,2)),
++                                        list(claytonCopula(3), c(3,4))))
+> hkCop
+Hierarchical Kendall Copula 
+Dimension:  4 
+Nesting copula:
+Gumbel copula, dim. d = 2 
+Dimension:  2 
+Parameters:
+  param   = 5
+Cluster copulas:
+   Frank copula of dimension 2 for indices 1 2 
+   Clayton copula of dimension 2 for indices 3 4 
+> 
+> dCopula(matrix(runif(400), 100), hkCop)
+  [1] 6.433433e-01 3.348302e-01 3.615622e+00 3.410560e-07 1.178238e+00
+  [6] 8.048900e-02 1.690168e-01 5.305798e-04 4.618813e-05 5.350493e-02
+ [11] 2.493133e-03 6.152065e-01 6.518570e-02 2.235544e-02 2.490304e-01
+ [16] 5.326343e-02 6.808485e-06 3.509753e-02 7.258763e-07 5.410654e-02
+ [21] 1.090973e-08 2.237097e+00 8.512683e-01 1.026118e-02 4.835522e-04
+ [26] 6.857246e-01 1.159760e-02 3.133317e-04 1.517567e+00 3.591442e-02
+ [31] 3.169128e-01 2.619989e+00 2.550218e-01 3.861798e-02 2.348532e-07
+ [36] 2.789580e-01 7.755898e-01 4.785271e-01 9.267968e-03 1.396126e+00
+ [41] 2.202319e-03 4.192452e-03 1.617115e-01 2.707788e-01 9.914409e-01
+ [46] 1.407246e-01 5.628767e-02 5.521994e-02 8.575113e-01 1.788966e+01
+ [51] 4.491722e+00 8.727301e-07 1.246154e+00 2.252108e+00 9.402297e-03
+ [56] 6.001285e+00 2.176484e-01 9.225527e-02 8.551536e-01 1.638200e-01
+ [61] 3.016274e-03 1.506666e+00 2.882292e-01 1.687605e-01 1.485128e+00
+ [66] 6.532553e-02 2.726785e+01 3.229636e-01 1.050487e-02 3.309150e-02
+ [71] 6.898333e-04 1.498956e-06 5.406499e-01 2.848999e+00 1.931719e+00
+ [76] 7.757838e-06 1.306034e-02 4.851986e-03 2.861461e-03 9.615451e-05
+ [81] 9.392229e-05 7.126138e-01 6.744632e-01 8.199520e-01 2.249711e-06
+ [86] 1.270373e+01 9.117576e-03 4.630269e-02 3.049987e-01 1.445574e-01
+ [91] 8.568259e-01 2.902776e+01 7.210867e-08 6.693381e-05 4.088938e-02
+ [96] 8.225315e-02 5.198940e-02 1.005896e-02 3.204720e-04 7.409520e-05
+> 
+> 
+> 
+> cleanEx()
+> nameEx("kendallDistribution")
+> ### * kendallDistribution
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: kendallDistribution
+> ### Title: The Kendall distribution
+> ### Aliases: kendallDistribution kendallDistribution,claytonCopula-method
+> ###   kendallDistribution,frankCopula-method
+> ###   kendallDistribution,gumbelCopula-method
+> ###   kendallDistribution,BB1Copula-method
+> ###   kendallDistribution,BB6Copula-method
+> ###   kendallDistribution,BB7Copula-method
+> ###   kendallDistribution,BB8Copula-method
+> ###   kendallDistribution,joeBiCopula-method
+> 
+> ### ** Examples
+> 
+> kendallDistribution(frankCopula(.8),.8)
+[1] 0.9710717
+> 
+> 
+> 
+> cleanEx()
+> nameEx("kendallRP")
+> ### * kendallRP
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: kendallRP
+> ### Title: calculating the Kendall Return Period
+> ### Aliases: kendallRP
+> ### Keywords: survival multivariate
+> 
+> ### ** Examples
+> 
+> kendallRP(getKendallDistr(frankCopula(7)), cl=c(0.9,0.99,0.999))
+[1]     35.5658   2921.4664 286119.5845
+> 
+> 
+> 
+> cleanEx()
+> nameEx("loglikByCopulasLags")
+> ### * loglikByCopulasLags
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: loglikByCopulasLags
+> ### Title: Log-likelihoods by copula family and spatial lag class
+> ### Aliases: loglikByCopulasLags
+> ### Keywords: spcopula log-likelihood
+> 
+> ### ** Examples
+> 
+> # load spatial data
+> library("sp")
+> data("meuse")
+> coordinates(meuse) <- ~x+y
+> 
+> # drop margins
+> meuse$marZinc <- plnorm(meuse$zinc, mean(log(meuse$zinc)), sd(log(meuse$zinc)))
+> 
+> # load parts of the workspace from demo(spCopula)
+> data("spCopDemo") 
+> 
+> calcKTauPol <- fitCorFun(bins, degree=3)
+
+Call:
+lm(formula = lagCor ~ poly(meanDists, degree), data = bins)
+
+Coefficients:
+             (Intercept)  poly(meanDists, degree)1  poly(meanDists, degree)2  
+                 0.20756                  -0.58268                   0.16262  
+poly(meanDists, degree)3  
+                -0.02181  
+
+Sum of squared residuals: 0.006621988 
+> 
+> loglikTau <- loglikByCopulasLags(bins, meuse, calcCor=calcKTauPol)
+Normal copula 
+  |                                                                              |                                                                      |   0%  |                                                                              |=======                                                               |  10%  |                                                                              |==============                                                        |  20%  |                                                                              |=====================                                                 |  30%  |                                                                              |============================                                          |  40%  |                                                                              |===================================                                   |  50%  |                                                                              |==========================================                            |  60%  |                                                                              |=================================================                     |  70%  |                                                                              |========================================================              |  80%  |                                                                              |===============================================================       |  90%  |                                                                              |======================================================================| 100%
+t-copula 
+  |                                                                              |                                                                      |   0%  |                                                                              |=======                                                               |  10%  |                                                                              |==============                                                        |  20%  |                                                                              |=====================                                                 |  30%  |                                                                              |============================                                          |  40%  |                                                                              |===================================                                   |  50%  |                                                                              |==========================================                            |  60%  |                                                                              |=================================================                     |  70%  |                                                                              |========================================================              |  80%  |                                                                              |===============================================================       |  90%  |                                                                              |======================================================================| 100%
+Clayton copula 
+  |                                                                              |                                                                      |   0%  |                                                                              |=======                                                               |  10%  |                                                                              |==============                                                        |  20%  |                                                                              |=====================                                                 |  30%  |                                                                              |============================                                          |  40%  |                                                                              |===================================                                   |  50%  |                                                                              |==========================================                            |  60%  |                                                                              |=================================================                     |  70%  |                                                                              |========================================================              |  80%  |                                                                              |===============================================================       |  90%  |                                                                              |======================================================================| 100%
+Frank copula 
+  |                                                                              |                                                                      |   0%  |                                                                              |=======                                                               |  10%  |                                                                              |==============                                                        |  20%  |                                                                              |=====================                                                 |  30%  |                                                                              |============================                                          |  40%  |                                                                              |===================================                                   |  50%  |                                                                              |==========================================                            |  60%  |                                                                              |=================================================                     |  70%  |                                                                              |========================================================              |  80%  |                                                                              |===============================================================       |  90%  |                                                                              |======================================================================| 100%
+Gumbel copula 
+  |                                                                              |                                                                      |   0%  |                                                                              |=======                                                               |  10%  |                                                                              |==============                                                        |  20%  |                                                                              |=====================                                                 |  30%  |                                                                              |============================                                          |  40%  |                                                                              |===================================                                   |  50%  |                                                                              |==========================================                            |  60%  |                                                                              |=================================================                     |  70%  |                                                                              |========================================================              |  80%  |                                                                              |===============================================================       |  90%  |                                                                              |======================================================================| 100%
+> loglikTau$loglik
+       normalCopula     tCopula claytonCopula frankCopula gumbelCopula
+ [1,]  4.891391e+00  4.94395331     5.1696606   4.3573568    3.2449077
+ [2,]  5.359282e+01 58.61119494    57.9212006  51.8000094   51.0967244
+ [3,]  2.440756e+01 24.39515611    34.0725572  21.6638658   14.3794266
+ [4,]  2.233897e+01 26.66003499    30.4531849  21.6784616   17.6613260
+ [5,]  2.406328e+00  3.20660375    11.6438889   0.6351066   -2.4864304
+ [6,]  3.068284e+00  4.14769579     6.1937884   1.9943030    1.6067081
+ [7,] -5.774744e-02 -0.62468684     2.3595991  -0.4176761   -1.7915547
+ [8,] -2.934606e+00 -3.06940682    -1.4166715  -3.4840853   -3.5742939
+ [9,] -3.409432e-01 -0.06213207     0.0687182  -0.4835267   -0.6247764
+[10,]  8.526513e-14 -0.74206073     0.0000000         NaN    0.0000000
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:sp'
+
+> nameEx("loglikByCopulasStLags")
+> ### * loglikByCopulasStLags
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: loglikByCopulasStLags
+> ### Title: Log-likelihoods by copula family and spatio-temporal lag class
+> ### Aliases: loglikByCopulasStLags
+> 
+> ### ** Examples
+> 
+> # the spatial case
+> # load spatial data
+> library("sp")
+> data("meuse")
+> coordinates(meuse) <- ~x+y
+> 
+> # drop margins
+> meuse$marZinc <- plnorm(meuse$zinc, mean(log(meuse$zinc)), sd(log(meuse$zinc)))
+> 
+> # load parts of the workspace from demo(spCopula)
+> data("spCopDemo") 
+> 
+> calcKTauPol <- fitCorFun(bins, degree=3)
+
+Call:
+lm(formula = lagCor ~ poly(meanDists, degree), data = bins)
+
+Coefficients:
+             (Intercept)  poly(meanDists, degree)1  poly(meanDists, degree)2  
+                 0.20756                  -0.58268                   0.16262  
+poly(meanDists, degree)3  
+                -0.02181  
+
+Sum of squared residuals: 0.006621988 
+> 
+> loglikTau <- loglikByCopulasLags(bins, meuse, calcCor=calcKTauPol)
+Normal copula 
+  |                                                                              |                                                                      |   0%  |                                                                              |=======                                                               |  10%  |                                                                              |==============                                                        |  20%  |                                                                              |=====================                                                 |  30%  |                                                                              |============================                                          |  40%  |                                                                              |===================================                                   |  50%  |                                                                              |==========================================                            |  60%  |                                                                              |=================================================                     |  70%  |                                                                              |========================================================              |  80%  |                                                                              |===============================================================       |  90%  |                                                                              |======================================================================| 100%
+t-copula 
+  |                                                                              |                                                                      |   0%  |                                                                              |=======                                                               |  10%  |                                                                              |==============                                                        |  20%  |                                                                              |=====================                                                 |  30%  |                                                                              |============================                                          |  40%  |                                                                              |===================================                                   |  50%  |                                                                              |==========================================                            |  60%  |                                                                              |=================================================                     |  70%  |                                                                              |========================================================              |  80%  |                                                                              |===============================================================       |  90%  |                                                                              |======================================================================| 100%
+Clayton copula 
+  |                                                                              |                                                                      |   0%  |                                                                              |=======                                                               |  10%  |                                                                              |==============                                                        |  20%  |                                                                              |=====================                                                 |  30%  |                                                                              |============================                                          |  40%  |                                                                              |===================================                                   |  50%  |                                                                              |==========================================                            |  60%  |                                                                              |=================================================                     |  70%  |                                                                              |========================================================              |  80%  |                                                                              |===============================================================       |  90%  |                                                                              |======================================================================| 100%
+Frank copula 
+  |                                                                              |                                                                      |   0%  |                                                                              |=======                                                               |  10%  |                                                                              |==============                                                        |  20%  |                                                                              |=====================                                                 |  30%  |                                                                              |============================                                          |  40%  |                                                                              |===================================                                   |  50%  |                                                                              |==========================================                            |  60%  |                                                                              |=================================================                     |  70%  |                                                                              |========================================================              |  80%  |                                                                              |===============================================================       |  90%  |                                                                              |======================================================================| 100%
+Gumbel copula 
+  |                                                                              |                                                                      |   0%  |                                                                              |=======                                                               |  10%  |                                                                              |==============                                                        |  20%  |                                                                              |=====================                                                 |  30%  |                                                                              |============================                                          |  40%  |                                                                              |===================================                                   |  50%  |                                                                              |==========================================                            |  60%  |                                                                              |=================================================                     |  70%  |                                                                              |========================================================              |  80%  |                                                                              |===============================================================       |  90%  |                                                                              |======================================================================| 100%
+> loglikTau$loglik
+       normalCopula     tCopula claytonCopula frankCopula gumbelCopula
+ [1,]  4.891391e+00  4.94395331     5.1696606   4.3573568    3.2449077
+ [2,]  5.359282e+01 58.61119494    57.9212006  51.8000094   51.0967244
+ [3,]  2.440756e+01 24.39515611    34.0725572  21.6638658   14.3794266
+ [4,]  2.233897e+01 26.66003499    30.4531849  21.6784616   17.6613260
+ [5,]  2.406328e+00  3.20660375    11.6438889   0.6351066   -2.4864304
+ [6,]  3.068284e+00  4.14769579     6.1937884   1.9943030    1.6067081
+ [7,] -5.774744e-02 -0.62468684     2.3595991  -0.4176761   -1.7915547
+ [8,] -2.934606e+00 -3.06940682    -1.4166715  -3.4840853   -3.5742939
+ [9,] -3.409432e-01 -0.06213207     0.0687182  -0.4835267   -0.6247764
+[10,]  8.526513e-14 -0.74206073     0.0000000         NaN    0.0000000
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:sp'
+
+> nameEx("mixtureCopula-class")
+> ### * mixtureCopula-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: mixtureCopula-class
+> ### Title: Class '"mixtureCopula"'
+> ### Aliases: mixtureCopula-class dduCopula,ANY,mixtureCopula-method
+> ###   ddvCopula,ANY,mixtureCopula-method fitCopula,mixtureCopula-method
+> ###   invdduCopula,numeric,mixtureCopula,numeric-method
+> ###   invddvCopula,numeric,mixtureCopula,numeric-method
+> ### Keywords: classes
+> 
+> ### ** Examples
+> 
+> showClass("mixtureCopula")
+Class "mixtureCopula" [package "spcopula"]
+
+Slots:
+                                                                       
+Name:    memberCops    dimension   parameters  param.names param.lowbnd
+Class:         list      integer      numeric    character      numeric
+                                
+Name:   param.upbnd     fullname
+Class:      numeric    character
+
+Extends: 
+Class "copula", directly
+Class "parCopula", by class "copula", distance 2
+Class "Copula", by class "copula", distance 3
+> 
+> 
+> 
+> cleanEx()
+> nameEx("mixtureCopula")
+> ### * mixtureCopula
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: mixtureCopula
+> ### Title: Constructor of a mixture copula
+> ### Aliases: mixtureCopula
+> 
+> ### ** Examples
+> 
+> cop <- mixtureCopula(c(5,-0.8,2,0.5),
++                      memberCops = list(gumbelCopula(), tCopula()))
+> cop
+mixtureCopula copula, dim. d = 2 
+Dimension:  2 
+Parameters:
+  param       =  5.0
+  rho.1       = -0.8
+  df          =  2.0
+  mixLambda   =  0.5
+> 
+> smpl <- rCopula(100, cop)
+> 
+> par(mfrow=c(2,2), mai=c(0.4,0.4,0.4,0.4))
+> plot(smpl,asp=1, main="sample")
+> persp(cop, dCopula, asp=1, main="density")
+> 
+> contour(cop, pCopula, asp=1, main="CDF")
+> points(rCopula_y(0.4, cop, 10), col="red")
+> 
+> tau(cop)
+[1] 0.1048328
+> rho(cop)
+[1] 0.07854988
+> lambda(cop)
+      lower       upper 
+0.006923416 0.432574239 
+> 
+> # too few points, but faster for package compilation
+> kenCop <- getKendallDistr(cop, smpl)
+> curve(kenCop, main="Kendall function", asp=1)
+> 
+> 
+> graphics::par(get("par.postscript", pos = 'CheckExEnv'))
+> cleanEx()
+> nameEx("neighbourhood-class")
+> ### * neighbourhood-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: neighbourhood-class
+> ### Title: Class 'neighbourhood'
+> ### Aliases: neighbourhood-class names,neighbourhood-method
+> ###   [,neighbourhood,numeric,ANY,ANY-method calcBins,neighbourhood-method
+> ### Keywords: classes
+> 
+> ### ** Examples
+> 
+> library("sp")
+> spdf <- data.frame(x=c(112,154,212,289),y=c(124,198,85,168),measure=rlnorm(4))
+> coordinates(spdf) <- ~x+y
+> 
+> getNeighbours(spdf,size=4)
+A set of neighbourhoods consisting of 4 locations each 
+with 4 rows of observations for:
+measure 
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:sp'
+
+> nameEx("neighbourhood")
+> ### * neighbourhood
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: neighbourhood
+> ### Title: Constructor of the 'neighbourhood' class.
+> ### Aliases: neighbourhood
+> ### Keywords: spatial
+> 
+> ### ** Examples
+> 
+> library("sp")
+> spdf <- data.frame(x=c(112,154,212,289),y=c(124,198,85,168),measure=rlnorm(4))
+> coordinates(spdf) <- ~x+y
+> 
+> neigh <- getNeighbours(spdf,size=4)
+> neigh
+A set of neighbourhoods consisting of 4 locations each 
+with 4 rows of observations for:
+measure 
+> 
+> # rebuilding neigh
+> neighbourhood(neigh@data, neigh@distances, neigh@index, neigh@var,
++               neigh@coVar, neigh@prediction)
+A set of neighbourhoods consisting of 4 locations each 
+with 4 rows of observations for:
+measure 
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:sp'
+
+> nameEx("qCopula_u")
+> ### * qCopula_u
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: qCopula_u
+> ### Title: The inverse of a bivariate copula given u or v
+> ### Aliases: qCopula_u qCopula_u,copula-method qCopula_v
+> ###   qCopula_v,copula-method
+> ### Keywords: distribution multivariate
+> 
+> ### ** Examples
+> 
+> uv <- qCopula_u(asCopula(c(-1,1)), p=rep(0.9,10), u=runif(10,0.9,1))
+> pCopula(uv,asCopula(c(-1,1)))-0.9
+ [1] -5.285787e-09 -1.979502e-10  7.899040e-09 -5.241861e-09  2.531447e-09
+ [6]  8.471355e-09 -6.502292e-09 -1.261782e-09  3.313125e-09  7.337630e-09
+> 
+> uv <- qCopula_v(asCopula(c(-1,1)), p=rep(0.9,10), v=runif(10,0.9,1))
+> pCopula(uv,asCopula(c(-1,1)))-0.9
+ [1] -1.033849e-09  4.513519e-09  8.776860e-09  2.134065e-09  3.399305e-09
+ [6]  4.947090e-09  2.469908e-10  4.513539e-09  6.891024e-09 -3.606405e-09
+> 
+> 
+> 
+> cleanEx()
+> nameEx("rCopula_y")
+> ### * rCopula_y
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: rCopula_y
+> ### Title: Sampling from a given contour level
+> ### Aliases: rCopula_y rCopula_y-methods rCopula_y,ANY-method
+> ###   rCopula_y,numeric,copula-method
+> ### Keywords: multivariate distribution
+> 
+> ### ** Examples
+> 
+> contour(frankCopula(4), pCopula, asp=1)
+> points(rCopula_y(0.4, frankCopula(4), 100), asp=1, xlim=c(0.8,1), col="red")
+> 
+> 
+> 
+> cleanEx()
+> nameEx("rankTransform")
+> ### * rankTransform
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: rankTransform
+> ### Title: rank order transformation of margins
+> ### Aliases: rankTransform
+> ### Keywords: function
+> 
+> ### ** Examples
+> 
+> data("simulatedTriples")
+> str(rankTransform(triples))
+'data.frame':	494 obs. of  3 variables:
+ $ peak    : num  0.00202 0.00404 0.00606 0.00808 0.0101 ...
+ $ duration: num  0.00202 0.00404 0.00606 0.0101 0.0101 ...
+ $ volume  : num  0.00202 0.00404 0.00606 0.00808 0.0101 ...
+> 
+> 
+> 
+> cleanEx()
+> nameEx("reduceNeighbours")
+> ### * reduceNeighbours
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: reduceNeighbours
+> ### Title: Selecting the strongest correlated neighbours
+> ### Aliases: reduceNeighbours
+> 
+> ### ** Examples
+> 
+> library("sp")
+> library("spacetime")
+> 
+> sp <- SpatialPoints(matrix(c(181000,181100,333500,333600),2))
+> time <- as.POSIXct("2014-03-18")+60*60*24*c(0,1,2,3,4)
+> data <- data.frame(var1=runif(10))
+> 
+> stData <- STFDF(sp, time, data)
+> 
+> stNeigh <- getStNeighbours(stData, spSize=2, tlags=-(0:2))
+> 
+> reduceNeighbours(stNeigh, function(h,delta) return(1/h/delta), 2)
+  |                                                                              |                                                                      |   0%  |                                                                              |============                                                          |  17%  |                                                                              |=======================                                               |  33%  |                                                                              |===================================                                   |  50%  |                                                                              |=========================================                             |  58%  |                                                                              |===============================================                       |  67%  |                                                                              |====================================================                  |  75%  |                                                                              |==========================================================            |  83%  |                                                                              |================================================================      |  92%  |                                                                              |======================================================================| 100%
+A set of spatio-temporal neighbourhoods consisting of 3 locations each 
+with 6 rows of observations for:
+var1 
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:spacetime', 'package:sp'
+
+> nameEx("simulatedTriples")
+> ### * simulatedTriples
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: simulatedTriples
+> ### Title: annual extreme rainfall triples
+> ### Aliases: triples
+> ### Keywords: datasets
+> 
+> ### ** Examples
+> 
+> data("simulatedTriples")
+> str(triples)
+'data.frame':	494 obs. of  3 variables:
+ $ peak    : num  0.167 0.335 0.488 0.586 0.753 ...
+ $ duration: num  3.75 4.12 4.22 4.41 4.41 4.41 4.5 4.5 4.5 4.5 ...
+ $ volume  : int  1220 2460 3693 4318 5552 12334 17884 18504 19738 22205 ...
+> 
+> 
+> 
+> cleanEx()
+> nameEx("spCopDemo")
+> ### * spCopDemo
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: spCopDemo
+> ### Title: workspace produced in 'demo(spCopula)'
+> ### Aliases: lokliktau bestFitTau bins calcKTauLin calcKTauPol dataSet
+> ###   gevEsti loc loglikTau meanLog scale sdLog shape spCop meuseSpVine
+> ### Keywords: datasets
+> 
+> ### ** Examples
+> 
+> data("spCopDemo")
+> ls()
+[1] "bestFitTau"  "bins"        "calcKTauPol" "meuseSpVine" "spCop"      
+> 
+> 
+> 
+> cleanEx()
+> nameEx("spCopPredict")
+> ### * spCopPredict
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: spCopPredict
+> ### Title: spatial prediction based on a spatial vine copula
+> ### Aliases: spCopPredict
+> ### Keywords: distribution prediction spatial
+> 
+> ### ** Examples
+> 
+> library("sp")
+> library("VineCopula")
+> data("meuse.grid")
+> coordinates(meuse.grid) <- ~x+y
+> gridded(meuse.grid) <- TRUE
+> 
+> data("meuse")
+> coordinates(meuse) <- ~x+y
+> data("spCopDemo")
+> 
+> calcKTauPol <- fitCorFun(bins, degree=3)
+
+Call:
+lm(formula = lagCor ~ poly(meanDists, degree), data = bins)
+
+Coefficients:
+             (Intercept)  poly(meanDists, degree)1  poly(meanDists, degree)2  
+                 0.20756                  -0.58268                   0.16262  
+poly(meanDists, degree)3  
+                -0.02181  
+
+Sum of squared residuals: 0.006621988 
+> 
+> spCop <- spCopula(components=list(normalCopula(), tCopula(),
++                                   frankCopula(), normalCopula(), claytonCopula(),
++                                   claytonCopula(), claytonCopula(), claytonCopula(),
++                                   claytonCopula(), indepCopula()),
++                   distances=bins$meanDists,
++                   spDepFun=calcKTauPol, unit="m")
+The parameters of the components will be recalculated according to the provided spDepFun where possible. 
+In case no 1-1 relation is known, the copula as in components is used. 
+> 
+> spVineCop <- spVineCopula(spCop, vineCopula(4L))
+> 
+> meuse$rtZinc <- rank(meuse$zinc)/(length(meuse)+1)
+> 
+> dataLocs <- meuse[1:4,]
+> predLocs <- meuse.grid[c(9:12,16:19,25:28),]
+> predMeuseNeigh <- getNeighbours(dataLocs, predLocs, 
++                                 5, "rtZinc", prediction=TRUE, min.dist=-1)
+> 
+> qMar <- function(x) {
++   qlnorm(x,mean(log(meuse$zinc)),sd(log(meuse$zinc)))
++ }
+> 
+> predMedian <- spCopPredict(predMeuseNeigh, dataLocs, predLocs,
++                            spVineCop, list(q=qMar), "quantile", p=0.5)
+  |                                                                              |                                                                      |   0%  |                                                                              |======                                                                |   8%  |                                                                              |============                                                          |  17%  |                                                                              |==================                                                    |  25%  |                                                                              |=======================                                               |  33%  |                                                                              |=============================                                         |  42%  |                                                                              |===================================                                   |  50%  |                                                                              |=========================================                             |  58%  |                                                                              |===============================================                       |  67%  |                                                                              |====================================================                  |  75%  |                                                                              |==========================================================            |  83%  |                                                                              |================================================================      |  92%  |                                                                              |======================================================================| 100%
+> 
+> ## Not run: 
+> ##D   spplot(predMedian, "quantile.0.5", 
+> ##D          sp.layout=list("sp.points", meuse, pch = 19, col = "red"),
+> ##D          col.regions=bpy.colors())
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:sp'
+
+> nameEx("spCopula-class")
+> ### * spCopula-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: spCopula-class
+> ### Title: Class '"spCopula"'
+> ### Aliases: spCopula-class dduCopula,matrix,spCopula-method
+> ###   ddvCopula,matrix,spCopula-method dduCopula,numeric,spCopula-method
+> ###   ddvCopula,numeric,spCopula-method
+> ### Keywords: classes spcopula copula
+> 
+> ### ** Examples
+> 
+> # data from demo(spcopula_estimation)
+> data("spCopDemo") 
+> 
+> calcKTauPol <- fitCorFun(bins, degree=3)
+
+Call:
+lm(formula = lagCor ~ poly(meanDists, degree), data = bins)
+
+Coefficients:
+             (Intercept)  poly(meanDists, degree)1  poly(meanDists, degree)2  
+                 0.20756                  -0.58268                   0.16262  
+poly(meanDists, degree)3  
+                -0.02181  
+
+Sum of squared residuals: 0.006621988 
+> 
+> spCop <- spCopula(components=list(normalCopula(0), tCopula(0, dispstr = "un"),
++                                   frankCopula(1), normalCopula(0), claytonCopula(0),
++                                   claytonCopula(0), claytonCopula(0), claytonCopula(0),
++                                   claytonCopula(0), indepCopula()),
++                   distances=bins$meanDists,
++                   spDepFun=calcKTauPol, unit="m")
+The parameters of the components will be recalculated according to the provided spDepFun where possible. 
+In case no 1-1 relation is known, the copula as in components is used. 
+parameter at boundary ==> returning indepCopula()
+parameter at boundary ==> returning indepCopula()
+parameter at boundary ==> returning indepCopula()
+parameter at boundary ==> returning indepCopula()
+parameter at boundary ==> returning indepCopula()
+>                   
+> dCopula(u=matrix(c(.3,.3,.7,.7),ncol=2),spCop,h=c(200,400))
+[1] 0.7181406 1.0000000
+> pCopula(u=matrix(c(.3,.3,.7,.7),ncol=2),spCop,h=c(200,400))
+[1] 0.2719061 0.2100000
+> 
+> 
+> 
+> cleanEx()
+> nameEx("spCopula")
+> ### * spCopula
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: spCopula
+> ### Title: Spatial Copula
+> ### Aliases: spCopula
+> ### Keywords: spcopula copula
+> 
+> ### ** Examples
+> 
+> data("spCopDemo")
+> 
+> calcKTauPol <- fitCorFun(bins, degree=3)
+
+Call:
+lm(formula = lagCor ~ poly(meanDists, degree), data = bins)
+
+Coefficients:
+             (Intercept)  poly(meanDists, degree)1  poly(meanDists, degree)2  
+                 0.20756                  -0.58268                   0.16262  
+poly(meanDists, degree)3  
+                -0.02181  
+
+Sum of squared residuals: 0.006621988 
+> 
+> spCop <- spCopula(components=list(normalCopula(), tCopula(),
++                                   frankCopula(), normalCopula(), claytonCopula(),
++                                   claytonCopula(), claytonCopula(), claytonCopula(),
++                                   claytonCopula(), indepCopula()),
++                   distances=bins$meanDists,
++                   spDepFun=calcKTauPol, unit="m")
+The parameters of the components will be recalculated according to the provided spDepFun where possible. 
+In case no 1-1 relation is known, the copula as in components is used. 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("spGaussCopPredict")
+> ### * spGaussCopPredict
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: spGaussCopPredict
+> ### Title: spatial prediction using a Gaussian Copula
+> ### Aliases: spGaussCopPredict
+> ### Keywords: prediction distribution
+> 
+> ### ** Examples
+> 
+> # load data from the Meuse demo
+> data("spCopDemo")
+> 
+> # calculate the correlation function based on Kendall's tau
+> calcKTauPol <- fitCorFun(bins, degree=1)
+
+Call:
+lm(formula = lagCor ~ poly(meanDists, degree), data = bins)
+
+Coefficients:
+            (Intercept)  poly(meanDists, degree)  
+                 0.2076                  -0.5827  
+
+Sum of squared residuals: 0.03354387 
+> 
+> # translate Kendall's tau correlation function into Gaussian Copula parameters 
+> # using a linear variogram
+> meuseGaussCorFun <- function(h) {
++   res <- pmax(iTau(normalCopula(0), calcKTauPol(0))/658*(658-h),0)
++   res[h ==0] <- 1
++   return(res)
++ }
+> 
+> # get some prediction data
+> library("sp")
+> data("meuse.grid")
+> coordinates(meuse.grid) <- ~x+y
+> gridded(meuse.grid) <- TRUE
+> 
+> data("meuse")
+> coordinates(meuse) <- ~x+y
+> 
+> meuse$rtZinc <- rank(meuse$zinc)/(length(meuse)+1)
+> 
+> # obtain the prediction neighbourhoods
+> predMeuseNeigh <- getNeighbours(meuse[1:4,], meuse.grid[c(9:12,16:19,25:28),],
++                                 5, "rtZinc", prediction=TRUE, min.dist=-1)
+> 
+> qMar <- function(x) {
++   qlnorm(x,mean(log(meuse$zinc)),sd(log(meuse$zinc)))
++ }
+> 
+> # predict using the Gaussian Copula
+> predMedian <- spGaussCopPredict(meuseGaussCorFun, predMeuseNeigh,
++                                 meuse[1:4,], meuse.grid[c(9:12,16:19,25:28),],
++                                 list(q=qMar))
+  |                                                                              |                                                                      |   0%  |                                                                              |======                                                                |   8%  |                                                                              |============                                                          |  17%  |                                                                              |==================                                                    |  25%  |                                                                              |=======================                                               |  33%  |                                                                              |=============================                                         |  42%  |                                                                              |===================================                                   |  50%  |                                                                              |=========================================                             |  58%  |                                                                              |===============================================                       |  67%  |                                                                              |====================================================                  |  75%  |                                                                              |==========================================================            |  83%  |                                                                              |================================================================      |  92%  |                                                                              |======================================================================| 100%
+> 
+> ## Not run: 
+> ##D   spplot(predMedian,"quantile.0.5", 
+> ##D          sp.layout=list("sp.points", meuse, pch = 19, col = "red"),
+> ##D          col.regions=bpy.colors())
+> ## End(Not run)
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:sp'
+
+> nameEx("spGaussLogLik")
+> ### * spGaussLogLik
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: spGaussLogLik
+> ### Title: Density evaluation for a spatial Gaussian Copula
+> ### Aliases: spGaussLogLik
+> ### Keywords: distribution
+> 
+> ### ** Examples
+> 
+> library("spcopula")
+> 
+> # load data from the Meuse demo
+> data("spCopDemo")
+> 
+> # calculate the correlation function based on Kendall's tau
+> calcKTauPol <- fitCorFun(bins, degree=1)
+
+Call:
+lm(formula = lagCor ~ poly(meanDists, degree), data = bins)
+
+Coefficients:
+            (Intercept)  poly(meanDists, degree)  
+                 0.2076                  -0.5827  
+
+Sum of squared residuals: 0.03354387 
+> 
+> # translate Kendall's tau correlation function into Gaussian Copula parameters 
+> # using a linear variogram
+> meuseGaussCorFun <- function(h) {
++   res <- pmax(iTau(normalCopula(0), calcKTauPol(0))/658*(658-h),0)
++   res[h ==0] <- 1
++   return(res)
++ }
+> 
+> # get the neighbours
+> library("sp")
+> data("meuse")
+> coordinates(meuse) <- ~x+y
+> 
+> meuse$rtZinc <- rank(meuse$zinc)/(length(meuse)+1)
+> 
+> meuseNeigh <- getNeighbours(meuse, size=5L, var="rtZinc",
++                             prediction=FALSE)
+> 
+> # calculate the log-likelihood
+> spGaussLogLik(meuseGaussCorFun, meuseNeigh, meuse)
+  |                                                                              |                                                                      |   0%  |                                                                              |                                                                      |   1%  |                                                                              |=                                                                     |   1%  |                                                                              |=                                                                     |   2%  |                                                                              |==                                                                    |   3%  |                                                                              |===                                                                   |   4%  |                                                                              |===                                                                   |   5%  |                                                                              |====                                                                  |   5%  |                                                                              |====                                                                  |   6%  |                                                                              |=====                                                                 |   6%  |                                                                              |=====                                                                 |   7%  |                                                                              |=====                                                                 |   8%  |                                                                              |======                                                                |   8%  |                                                                              |======                                                                |   9%  |                                                                              |=======                                                               |  10%  |                                                                              |========                                                              |  11%  |                                                                              |========                                                              |  12%  |                                                                              |=========                                                             |  12%  |                                                                              |=========                                                             |  13%  |                                                                              |=========                                                             |  14%  |                                                                              |==========                                                            |  14%  |                                                                              |==========                                                            |  15%  |                                                                              |===========                                                           |  15%  |                                                                              |===========                                                           |  16%  |                                                                              |============                                                          |  17%  |                                                                              |=============                                                         |  18%  |                                                                              |=============                                                         |  19%  |                                                                              |==============                                                        |  19%  |                                                                              |==============                                                        |  20%  |                                                                              |==============                                                        |  21%  |                                                                              |===============                                                       |  21%  |                                                                              |===============                                                       |  22%  |                                                                              |================                                                      |  23%  |                                                                              |=================                                                     |  24%  |                                                                              |=================                                                     |  25%  |                                                                              |==================                                                    |  25%  |                                                                              |==================                                                    |  26%  |                                                                              |===================                                                   |  26%  |                                                                              |===================                                                   |  27%  |                                                                              |===================                                                   |  28%  |                                                                              |====================                                                  |  28%  |                                                                              |====================                                                  |  29%  |                                                                              |=====================                                                 |  30%  |                                                                              |======================                                                |  31%  |                                                                              |======================                                                |  32%  |                                                                              |=======================                                               |  32%  |                                                                              |=======================                                               |  33%  |                                                                              |=======================                                               |  34%  |                                                                              |========================                                              |  34%  |                                                                              |========================                                              |  35%  |                                                                              |=========================                                             |  35%  |                                                                              |=========================                                             |  36%  |                                                                              |==========================                                            |  37%  |                                                                              |===========================                                           |  38%  |                                                                              |===========================                                           |  39%  |                                                                              |============================                                          |  39%  |                                                                              |============================                                          |  40%  |                                                                              |============================                                          |  41%  |                                                                              |=============================                                         |  41%  |                                                                              |=============================                                         |  42%  |                                                                              |==============================                                        |  43%  |                                                                              |===============================                                       |  44%  |                                                                              |===============================                                       |  45%  |                                                                              |================================                                      |  45%  |                                                                              |================================                                      |  46%  |                                                                              |=================================                                     |  46%  |                                                                              |=================================                                     |  47%  |                                                                              |=================================                                     |  48%  |                                                                              |==================================                                    |  48%  |                                                                              |==================================                                    |  49%  |                                                                              |===================================                                   |  50%  |                                                                              |====================================                                  |  51%  |                                                                              |====================================                                  |  52%  |                                                                              |=====================================                                 |  52%  |                                                                              |=====================================                                 |  53%  |                                                                              |=====================================                                 |  54%  |                                                                              |======================================                                |  54%  |                                                                              |======================================                                |  55%  |                                                                              |=======================================                               |  55%  |                                                                              |=======================================                               |  56%  |                                                                              |========================================                              |  57%  |                                                                              |=========================================                             |  58%  |                                                                              |=========================================                             |  59%  |                                                                              |==========================================                            |  59%  |                                                                              |==========================================                            |  60%  |                                                                              |==========================================                            |  61%  |                                                                              |===========================================                           |  61%  |                                                                              |===========================================                           |  62%  |                                                                              |============================================                          |  63%  |                                                                              |=============================================                         |  64%  |                                                                              |=============================================                         |  65%  |                                                                              |==============================================                        |  65%  |                                                                              |==============================================                        |  66%  |                                                                              |===============================================                       |  66%  |                                                                              |===============================================                       |  67%  |                                                                              |===============================================                       |  68%  |                                                                              |================================================                      |  68%  |                                                                              |================================================                      |  69%  |                                                                              |=================================================                     |  70%  |                                                                              |==================================================                    |  71%  |                                                                              |==================================================                    |  72%  |                                                                              |===================================================                   |  72%  |                                                                              |===================================================                   |  73%  |                                                                              |===================================================                   |  74%  |                                                                              |====================================================                  |  74%  |                                                                              |====================================================                  |  75%  |                                                                              |=====================================================                 |  75%  |                                                                              |=====================================================                 |  76%  |                                                                              |======================================================                |  77%  |                                                                              |=======================================================               |  78%  |                                                                              |=======================================================               |  79%  |                                                                              |========================================================              |  79%  |                                                                              |========================================================              |  80%  |                                                                              |========================================================              |  81%  |                                                                              |=========================================================             |  81%  |                                                                              |=========================================================             |  82%  |                                                                              |==========================================================            |  83%  |                                                                              |===========================================================           |  84%  |                                                                              |===========================================================           |  85%  |                                                                              |============================================================          |  85%  |                                                                              |============================================================          |  86%  |                                                                              |=============================================================         |  86%  |                                                                              |=============================================================         |  87%  |                                                                              |=============================================================         |  88%  |                                                                              |==============================================================        |  88%  |                                                                              |==============================================================        |  89%  |                                                                              |===============================================================       |  90%  |                                                                              |================================================================      |  91%  |                                                                              |================================================================      |  92%  |                                                                              |=================================================================     |  92%  |                                                                              |=================================================================     |  93%  |                                                                              |=================================================================     |  94%  |                                                                              |==================================================================    |  94%  |                                                                              |==================================================================    |  95%  |                                                                              |===================================================================   |  95%  |                                                                              |===================================================================   |  96%  |                                                                              |====================================================================  |  97%  |                                                                              |===================================================================== |  98%  |                                                                              |===================================================================== |  99%  |                                                                              |======================================================================|  99%  |                                                                              |======================================================================| 100%
+[1] 181.7964
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:sp'
+
+> nameEx("spVineCopula-class")
+> ### * spVineCopula-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: spVineCopula-class
+> ### Title: Class '"spVineCopula"'
+> ### Aliases: spVineCopula-class mixedSpVineCopula-class
+> ###   pureSpVineCopula-class fitCopula,spVineCopula-method
+> ### Keywords: classes
+> 
+> ### ** Examples
+> 
+> showClass("spVineCopula")
+Virtual Class "spVineCopula" [package "spcopula"]
+
+No Slots, prototype of class "mixedSpVineCopula"
+
+Known Subclasses: "mixedSpVineCopula", "pureSpVineCopula"
+> 
+> 
+> 
+> cleanEx()
+> nameEx("spVineCopula")
+> ### * spVineCopula
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: spVineCopula
+> ### Title: Constructor of the virtual super class 'spVineCopula'.
+> ### Aliases: spVineCopula
+> ### Keywords: mulitvariate distribution
+> 
+> ### ** Examples
+> 
+> # a spatial C-vine copula (with independent dummy copulas in the upper vine)
+> library("VineCopula")
+> data("spCopDemo")
+> 
+> calcKTauPol <- fitCorFun(bins, degree=3)
+
+Call:
+lm(formula = lagCor ~ poly(meanDists, degree), data = bins)
+
+Coefficients:
+             (Intercept)  poly(meanDists, degree)1  poly(meanDists, degree)2  
+                 0.20756                  -0.58268                   0.16262  
+poly(meanDists, degree)3  
+                -0.02181  
+
+Sum of squared residuals: 0.006621988 
+> 
+> spCop <- spCopula(components=list(normalCopula(0), tCopula(0, dispstr = "un"),
++                                   frankCopula(1), normalCopula(0), claytonCopula(0),
++                                   claytonCopula(0), claytonCopula(0), claytonCopula(0),
++                                   claytonCopula(0), indepCopula()),
++                   distances=bins$meanDists,
++                   spDepFun=calcKTauPol, unit="m")
+The parameters of the components will be recalculated according to the provided spDepFun where possible. 
+In case no 1-1 relation is known, the copula as in components is used. 
+parameter at boundary ==> returning indepCopula()
+parameter at boundary ==> returning indepCopula()
+parameter at boundary ==> returning indepCopula()
+parameter at boundary ==> returning indepCopula()
+parameter at boundary ==> returning indepCopula()
+> 
+> library("VineCopula")
+> RVM <- RVineMatrix(matrix(c(1,0,0,2,2,0,3,3,3),3,byrow=TRUE))
+> spVineCopula(spCop, vineCopula(RVM))
+Spatial vine copula family with 1 spatial tree(s). 
+Dimension:  4 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("stCoVarVineCopula-class")
+> ### * stCoVarVineCopula-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: stCoVarVineCopula-class
+> ### Title: Class '"stCoVarVineCopula"'
+> ### Aliases: stCoVarVineCopula-class
+> ### Keywords: classes
+> 
+> ### ** Examples
+> 
+> showClass("stCoVarVineCopula")
+Class "stCoVarVineCopula" [package "spcopula"]
+
+Slots:
+                                                                       
+Name:      coVarCop        stCop       topCop    dimension   parameters
+Class:     function     stCopula       copula      integer      numeric
+                                                          
+Name:   param.names param.lowbnd  param.upbnd     fullname
+Class:    character      numeric      numeric    character
+
+Extends: 
+Class "copula", directly
+Class "parCopula", by class "copula", distance 2
+Class "Copula", by class "copula", distance 3
+> 
+> 
+> 
+> cleanEx()
+> nameEx("stCoVarVineCopula")
+> ### * stCoVarVineCopula
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: stCoVarVineCopula
+> ### Title: Constructor for 'stCoVarVineCopula'
+> ### Aliases: stCoVarVineCopula
+> ### Keywords: ~kwd1 ~kwd2
+> 
+> ### ** Examples
+> 
+> # a spatio-temporal C-vine copula (with independent copulas in the upper vine)
+> library("VineCopula")
+> spCopT0 <- spCopula(components=list(claytonCopula(8), claytonCopula(4), 
++                                     claytonCopula(2), claytonCopula(1),
++                                     claytonCopula(0.5), indepCopula()),
++                     distances=c(100,200,300,400,500,600),
++                     unit="km")
+> spCopT1 <- spCopula(components=list(claytonCopula(4), claytonCopula(2), 
++                                     claytonCopula(1), claytonCopula(0.5),
++                                     indepCopula()),
++                     distances=c(100,200,300,400,500),
++                     unit="km")
+> spCopT2 <- spCopula(components=list(claytonCopula(2), claytonCopula(1), 
++                                     claytonCopula(0.5), indepCopula()),
++                     distances=c(100,200,300,400),
++                     unit="km")
+> 
+> stCop <- stCopula(components=list(spCopT0, spCopT1, spCopT2),
++                   tlags=-(0:2))
+> 
+> # only a constant copula ius used for the covariate
+> stCoVarVineCopula(function(x) gumbelCopula(2), stCop, vineCopula(9L))
+Spatio-temporal covariate vine copula family with 1 spatio-temporal tree. 
+Dimension:  10 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("stCopPredict")
+> ### * stCopPredict
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: stCopPredict
+> ### Title: Spatio-Temporal Prediction based on a Spatio-Temporal Vine
+> ###   Copula
+> ### Aliases: stCopPredict
+> ### Keywords: distribution prediction spatial
+> 
+> ### ** Examples
+> 
+> library("sp")
+> library("spacetime")
+> library("VineCopula")
+> 
+> spCopT0 <- spCopula(components=list(claytonCopula(8), claytonCopula(4), 
++                                     claytonCopula(2), claytonCopula(1),
++                                     claytonCopula(0.5), indepCopula()),
++                     distances=c(100,200,300,400,500,600),
++                     unit="km")
+> spCopT1 <- spCopula(components=list(claytonCopula(4), claytonCopula(2), 
++                                     claytonCopula(1), claytonCopula(0.5),
++                                     indepCopula()),
++                     distances=c(100,200,300,400,500),
++                     unit="km")
+> 
+> stCop <- stCopula(components=list(spCopT0, spCopT1),
++                   tlags=-(0:1))
+> 
+> stVineCop <- stVineCopula(stCop, vineCopula(4L))
+> 
+> sp <- SpatialPoints(matrix(c(181000,181100,333500,333600),2))
+> time <- as.POSIXct("2014-03-18")+60*60*24*c(0,1,2)
+> data <- data.frame(var1=runif(6))
+> 
+> stData <- STFDF(sp, time, data)
+> stQuerry <- STF(SpatialPoints(matrix(c(181000,181200,333600,333600),2)),
++                 time[2:3])
+> 
+> stNeigh <- getStNeighbours(stData=stData, ST=stQuerry, prediction=TRUE, spSize=3,
++                            tlags=-(0:1))
+> 
+> stCopPredict(stNeigh, stData, stQuerry, stVineCop, list(q=qunif), "quantile", 0.5)
+[Predicting location 1.]
+[Predicting location 2.]
+[Predicting location 3.]
+[Predicting location 4.]
+An object of class "STFDF"
+Slot "data":
+  quantile.0.5
+1    0.5742242
+2    0.6619959
+3    0.6762306
+4    0.8470063
+
+Slot "sp":
+SpatialPoints:
+     coords.x1 coords.x2
+[1,]    181000    333600
+[2,]    181200    333600
+Coordinate Reference System (CRS) arguments: NA 
+
+Slot "time":
+           timeIndex
+2014-03-19         1
+2014-03-20         2
+
+Slot "endTime":
+[1] "2014-03-20 CET" "2014-03-21 CET"
+
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:spacetime', 'package:sp'
+
+> nameEx("stCopula-class")
+> ### * stCopula-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: stCopula-class
+> ### Title: Class '"stCopula"'
+> ### Aliases: stCopula-class show,stCopula-method
+> ###   dduCopula,numeric,stCopula-method dduCopula,matrix,stCopula-method
+> ###   ddvCopula,numeric,stCopula-method ddvCopula,matrix,stCopula-method
+> ### Keywords: classes
+> 
+> ### ** Examples
+> 
+> showClass("stCopula")
+Class "stCopula" [package "spcopula"]
+
+Slots:
+                                                                       
+Name:     spCopList        tlags         tres    dimension   parameters
+Class:         list      numeric    character      integer      numeric
+                                                          
+Name:   param.names param.lowbnd  param.upbnd     fullname
+Class:    character      numeric      numeric    character
+
+Extends: 
+Class "copula", directly
+Class "parCopula", by class "copula", distance 2
+Class "Copula", by class "copula", distance 3
+> 
+> 
+> 
+> cleanEx()
+> nameEx("stCopula")
+> ### * stCopula
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: stCopula
+> ### Title: Spatio-Temporal Copula
+> ### Aliases: stCopula
+> ### Keywords: spcopula copula
+> 
+> ### ** Examples
+> 
+> spCopT0 <- spCopula(components=list(claytonCopula(8), claytonCopula(4), 
++                                     claytonCopula(2), claytonCopula(1),
++                                     claytonCopula(0.5), indepCopula()),
++                     distances=c(100,200,300,400,500,600),
++                     unit="km")
+> spCopT1 <- spCopula(components=list(claytonCopula(4), claytonCopula(2), 
++                                     claytonCopula(1), claytonCopula(0.5),
++                                     indepCopula()),
++                     distances=c(100,200,300,400,500),
++                     unit="km")
+> spCopT2 <- spCopula(components=list(claytonCopula(2), claytonCopula(1), 
++                                     claytonCopula(0.5), indepCopula()),
++                     distances=c(100,200,300,400),
++                     unit="km")
+> 
+> stCop <- stCopula(components=list(spCopT0, spCopT1, spCopT2),
++                   tlags=-(0:2))
+> 
+> 
+> 
+> cleanEx()
+> nameEx("stNeighbourhood-class")
+> ### * stNeighbourhood-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: stNeighbourhood-class
+> ### Title: Class '"stNeighbourhood"'
+> ### Aliases: stNeighbourhood-class [,stNeighbourhood,numeric,ANY,ANY-method
+> ###   names,stNeighbourhood-method show,stNeighbourhood-method
+> ### Keywords: classes
+> 
+> ### ** Examples
+> 
+> showClass("stNeighbourhood")
+Class "stNeighbourhood" [package "spcopula"]
+
+Slots:
+                                                                        
+Name:        data  distances      index        var      coVar prediction
+Class: data.frame      array      array  character  character    logical
+> 
+> 
+> 
+> cleanEx()
+> nameEx("stNeighbourhood")
+> ### * stNeighbourhood
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: stNeighbourhood
+> ### Title: Constructor of the 'stNeighbourhood' class.
+> ### Aliases: stNeighbourhood
+> ### Keywords: spatio-temporal
+> 
+> ### ** Examples
+> 
+> library("sp")
+> library("spacetime")
+> 
+> sp <- SpatialPoints(matrix(c(181000,181100,333500,333600),2))
+> time <- as.POSIXct("2014-03-18")+60*60*24*c(0,1,2)
+> data <- data.frame(var1=runif(6))
+> 
+> stData <- STFDF(sp, time, data)
+> stQuerry <- STF(SpatialPoints(matrix(c(181000,181200,333600,333600),2)),
++                 time[2:3])
+> 
+> getStNeighbours(stData=stData, ST=stQuerry, prediction=TRUE, spSize=3,
++                 tlags=-(0:1))
+A set of spatio-temporal neighbourhoods consisting of 5 locations each 
+with 4 rows of observations for:
+var1 
+> 
+> 
+> 
+> cleanEx()
+
+detaching 'package:spacetime', 'package:sp'
+
+> nameEx("stVineCopula-class")
+> ### * stVineCopula-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: stVineCopula-class
+> ### Title: Class '"stVineCopula"'
+> ### Aliases: stVineCopula-class fitCopula,stVineCopula-method
+> ### Keywords: classes
+> 
+> ### ** Examples
+> 
+> showClass("stVineCopula")
+Class "stVineCopula" [package "spcopula"]
+
+Slots:
+                                                                       
+Name:         stCop       topCop    dimension   parameters  param.names
+Class:     stCopula       copula      integer      numeric    character
+                                             
+Name:  param.lowbnd  param.upbnd     fullname
+Class:      numeric      numeric    character
+
+Extends: 
+Class "copula", directly
+Class "parCopula", by class "copula", distance 2
+Class "Copula", by class "copula", distance 3
+> 
+> 
+> 
+> cleanEx()
+> nameEx("stVineCopula")
+> ### * stVineCopula
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: stVineCopula
+> ### Title: Constructor of the class 'stVineCopula'.
+> ### Aliases: stVineCopula
+> ### Keywords: mulitvariate distribution
+> 
+> ### ** Examples
+> 
+> # a spatio-temporal C-vine copula (with independent copulas in the upper vine)
+> library("VineCopula")
+> 
+> spCopT0 <- spCopula(components=list(claytonCopula(8), claytonCopula(4), 
++                                     claytonCopula(2), claytonCopula(1),
++                                     claytonCopula(0.5), indepCopula()),
++                     distances=c(100,200,300,400,500,600),
++                     unit="km")
+> spCopT1 <- spCopula(components=list(claytonCopula(4), claytonCopula(2), 
++                                     claytonCopula(1), claytonCopula(0.5),
++                                     indepCopula()),
++                     distances=c(100,200,300,400,500),
++                     unit="km")
+> spCopT2 <- spCopula(components=list(claytonCopula(2), claytonCopula(1), 
++                                     claytonCopula(0.5), indepCopula()),
++                     distances=c(100,200,300,400),
++                     unit="km")
+> 
+> stCop <- stCopula(components=list(spCopT0, spCopT1, spCopT2),
++                   tlags=-(0:2))
+> 
+> stVineCopula(stCop, vineCopula(9L))
+Spatio-temporal vine copula family with 1 spatio-temporal tree. 
+Dimension:  10 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("tawn3pCopula-class")
+> ### * tawn3pCopula-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: tawn3pCopula-class
+> ### Title: Class '"tawn3pCopula"'
+> ### Aliases: tawn3pCopula-class A,tawn3pCopula-method
+> ###   dAdu,tawn3pCopula-method dCopula,matrix,tawn3pCopula-method
+> ###   dCopula,numeric,tawn3pCopula-method fitCopula,tawn3pCopula-method
+> ###   pCopula,matrix,tawn3pCopula-method
+> ###   pCopula,numeric,tawn3pCopula-method
+> ###   rCopula,numeric,tawn3pCopula-method dduCopula,ANY,tawn3pCopula-method
+> ###   ddvCopula,ANY,tawn3pCopula-method
+> ### Keywords: classes
+> 
+> ### ** Examples
+> 
+> showClass("tawn3pCopula")
+Class "tawn3pCopula" [package "spcopula"]
+
+Slots:
+                                                                       
+Name:      exprdist    dimension   parameters  param.names param.lowbnd
+Class:   expression      integer      numeric    character      numeric
+                                
+Name:   param.upbnd     fullname
+Class:      numeric    character
+
+Extends: 
+Class "evCopula", directly
+Class "copula", by class "evCopula", distance 2
+Class "parCopula", by class "evCopula", distance 3
+Class "Copula", by class "evCopula", distance 4
+> 
+> 
+> 
+> cleanEx()
+> nameEx("tawn3pCopula")
+> ### * tawn3pCopula
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: tawn3pCopula
+> ### Title: Tawn Copula Family constructor using all three parameters
+> ### Aliases: tawn3pCopula
+> ### Keywords: copula distribution
+> 
+> ### ** Examples
+> 
+> persp(tawn3pCopula(c(0.4,0.9,4)), dCopula)
+> persp(tawn3pCopula(c(0.4,0.9,4)), pCopula)
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("unitScatter")
+> ### * unitScatter
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: unitScatter
+> ### Title: A scatter plot on the unit-square
+> ### Aliases: unitScatter univScatter
+> ### Keywords: hplot
+> 
+> ### ** Examples
+> 
+> data("loss")
+> rt_loss <- rankTransform(loss[,1:2])
+> unitScatter(smpl=rt_loss)
+> 
+> 
+> 
+> ### * <FOOTER>
+> ###
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  12.88 0.41 14.08 NA NA 
+> grDevices::dev.off()
+null device 
+          1 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')
