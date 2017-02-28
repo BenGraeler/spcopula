@@ -26,9 +26,6 @@ setClass("trunCopula",
          validity = validTrunCop,
          contains = list("copula"))
 
-copula <- gumbelCopula(3)
-contPar <- 1.8
-
 trunCopula <- function(copula, contPar, approx.u=1:1000/1000) {
   
   # setting helper functions
@@ -145,11 +142,12 @@ pTrunCop <- function(u, copula, ...) {
   boolu21 <- u[,2] == 1
   res[boolu21] <- u[boolu21,1]
   
-  trunVals <- copula@.tools$trunFun(u[,1])
-  u[,2] <- copula@.tools$invCDF(u[,2])
+  contVals <- copula@.tools$contFun(u[,1])
+  boolBelow <- u[,2] < contVals
+
+  u[boolBelow, 1] <- copula@.tools$invContFun(u[boolBelow,2])
   
-  boolBelow <- u[,2] < trunVals
-  u[boolBelow, 1] <- copula@.tools$invTrunFun(u[boolBelow,2])
+  u[,2] <- copula@.tools$invCDF(u[,2])
   
   res[!(boolu11 | boolu21)] <- pCopula(u[!(boolu11 | boolu21),], copula@trunFamily)# , ...)
   return(res)
@@ -202,70 +200,31 @@ fitTrunCop <- function(copula, data, ..., method, lower, upper, tol=1e-3) {
 
 setMethod("fitCopula", c("trunCopula", "matrix"), fitTrunCop)
 
-## sample along contour
-
-copula <- trunCop
-y <- c(0.3, 0.7)
-
-rTrunCop_y <- function(y, copula, n=1, n.disc = 100) {
+# ## sample along contour
+rTrunCop_y <- function(y, copula, n=1, n.disc = 1000) {
   stopifnot(copula@dimension == 2)
   n.y <- length(y)
   stopifnot(n.y == 1 | n == 1)
   
-  isConLev <- y
-  for (i in 1:length(y)) { # i <- 1
-    optFun <- function(u) {
-      mean(abs(pCopula(cbind(u, copula@.tools$contFun(u)),
-                                  copula) - y[i]))
-    }
-    
-    isConLev[i] <- optimise(optFun, c(y[i],1))$minimum
-  }
-  
-  isConLev <- cbind(isConLev, copula@.tools$contFun(isConLev))
-   
-  
-  contVals <- copula@.tools$contFun(u[,1])
-  diffContVals <- u[,2] - contVals
-  
-  # split in above and on contour
-  boolAbove <- diffContVals >= tol
-  boolContour <- abs(diffContVals) < tol
-  
-  # shift back
-  u[,2] <- sapply(u[,2], function(v) copula@.tools$invCDF(v))
-  
-  res[boolAbove] <- dCopula(u[boolAbove,], copula@trunFamily, log, ...)
-  
-  if (any(boolContour)) {
-    res[boolContour] <- copula@.tools$dCont(u[boolContour,1])
-    if (log)
-      res[boolContour] <- log(res[boolContour])
-  }
-}
+  uIntSec <- copula@.tools$invContFun(y)
 
-
-rCop_y <- function(y, copula, n=1, n.disc = 1e2) {
-  stopifnot(copula@dimension == 2)
-  n.y <- length(y)
-  stopifnot(n.y == 1 | n == 1)
-  
   smpl <- matrix(NA, n.y*n, 2)
   
-  for (i in 1:n.y) { # i <- 1
-    condVals <- seq(y[i], 1-(1-y[i])/n.disc, length.out = n.disc)
-    uv <- qCopula_v(copula, rep(y[i], n.disc), condVals)
-    uv <- rbind(uv, qCopula_u(copula, rep(y[i], n.disc), condVals))
-    
+  for (i in 1:n.y) { # i <- 1 i <- i+1
+    condVals <- seq(y[i], 1-(1-y[i])/n.disc^2, length.out = n.disc)
+    uv <- qCopula_v(copula, rep(y[i], n.disc-1), condVals[-1])
+    uv <- rbind(uv, qCopula_u(copula, rep(y[i], sum(condVals < uIntSec[i])),
+                              condVals[condVals < uIntSec[i]]))
     uv <- uv[order(uv[,1]),]
     
     dSeq <- cumsum(c(0, apply((uv[-nrow(uv),]-uv[-1,])^2, 1, function (x) sqrt(sum(x)))))
-    probs <- dCopula(uv, copula)
+    probs <- dTrunCop(uv, copula)
     
     apFun <- approxfun(dSeq, probs, rule = 2)
-    probCor <- integrate(apFun, 0, max(dSeq))$value
+    probLine <- copula@.tools$dCont(uIntSec[i])
+    probCont <- integrate(apFun, 0, max(dSeq))$value
     
-    rContour <- runif(n, 0, probCor)
+    rContour <- runif(n, 0, probCont + probLine)
     
     funAppConPoint <- function(rCont) {
       invCDFContour <- function(x) {
@@ -280,8 +239,14 @@ rCop_y <- function(y, copula, n=1, n.disc = 1e2) {
       
       uv[dSeqInt,] + (lContour - dSeq[dSeqInt])/lSeq * (uv[dSeqInt+1,]-uv[dSeqInt,])
     }
-    
+  
     if (n == 1) {
+      if (rContour <= probLine) {
+        smpl[i,] <- c(uIntSec[i], y[i])
+        next;
+      }
+      rContour <- rContour - probLine
+      
       appConPoint <- funAppConPoint(rContour)
       
       if (appConPoint[1] > appConPoint[2]) {
@@ -290,24 +255,41 @@ rCop_y <- function(y, copula, n=1, n.disc = 1e2) {
         smpl[i,] <- qCopula_v(copula, y[i], appConPoint[2])
       }
     } else {
-      appConPoint <- t(sapply(rContour, funAppConPoint))
+      boolLine <- rContour <= probLine
+      smpl <- cbind(rep(uIntSec, n),
+                           rep(y, n))
+      rContour <- rContour - probLine
+      smpl[!boolLine,] <- t(sapply(rContour[!boolLine], funAppConPoint))
       
-      boolLower <- appConPoint[,1] > appConPoint[,2]
-      smpl[boolLower,] <- qCopula_u(copula, rep(y, sum(boolLower)), appConPoint[boolLower, 1])
-      smpl[!boolLower,] <- qCopula_v(copula, rep(y, sum(!boolLower)), appConPoint[!boolLower, 2])
+      boolLower <- smpl[,1] > smpl[,2]
+      if (any(boolLower & !boolLine))
+        smpl[boolLower & !boolLine,] <- qCopula_u(copula, rep(y[i], sum(boolLower & !boolLine)),
+                                                  smpl[boolLower & !boolLine, 1])
+      if (any(!boolLower & !boolLine))
+        smpl[!boolLower & !boolLine,] <- qCopula_v(copula, rep(y[i], sum(!boolLower & !boolLine)),
+                                                   smpl[!boolLower & !boolLine, 2])
     }
   }
   
-  return(smpl)  
+  return(smpl)
 }
 
+setMethod(rCopula_y, signature = c("numeric", "trunCopula"), rTrunCop_y)
 
+## cond inverse
 
-# copula <- trunCopula(gumbelCopula(2), 1.8)
-# smpl <- rTrunCop(500, copula)
-# plot(smpl)
-# 
-# hist(dduTrunCop(smpl, copula), freq=F, n=10)
-# abline(h=1, col="darkgreen")
-# 
-# contour(normalCopula(1), pCopula, asp=1, n=200)
+qTrunCop_v <- function(copula, p, v, tol=.Machine$double.eps^.5) { # sample=NULL
+  stopifnot(length(p) == length(v)) 
+
+  cbind(sapply(1:length(p), 
+                function(ind) {
+                  if (v[ind] < p[ind]) 
+                    return(NA)
+                  if (v[ind] == 1)
+                    return(p[ind])
+                  optimise(function(u) abs(pCopula(cbind(u, v[ind]), copula) - p[ind]),
+                           c(p[ind], copula@.tools$invContFun(v[ind])), tol=tol)$minimum
+                }), v)
+}
+
+setMethod("qCopula_v", signature = c("trunCopula"), qTrunCop_v)

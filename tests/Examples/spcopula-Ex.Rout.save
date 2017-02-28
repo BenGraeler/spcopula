@@ -133,7 +133,7 @@ Formal class 'STFDF' [package "spacetime"] with 4 slots
 > ### Title: Class '"asCopula"'
 > ### Aliases: asCopula-class dduCopula,matrix,asCopula-method
 > ###   dduCopula,numeric,asCopula-method ddvCopula,matrix,asCopula-method
-> ###   ddvCopula,numeric,asCopula-method fitCopula,asCopula-method
+> ###   ddvCopula,numeric,asCopula-method fitCopula,asCopula,ANY-method
 > ###   invdduCopula,numeric,asCopula,numeric-method
 > ###   invddvCopula,numeric,asCopula,numeric-method
 > ### Keywords: classes asymmetric copula copula
@@ -484,7 +484,7 @@ parameter at boundary ==> returning indepCopula()
 > ### Title: Class '"cqsCopula"'
 > ### Aliases: cqsCopula-class dduCopula,matrix,cqsCopula-method
 > ###   dduCopula,numeric,cqsCopula-method ddvCopula,matrix,cqsCopula-method
-> ###   ddvCopula,numeric,cqsCopula-method fitCopula,cqsCopula-method
+> ###   ddvCopula,numeric,cqsCopula-method fitCopula,cqsCopula,ANY-method
 > ###   invdduCopula,numeric,cqsCopula,numeric-method
 > ###   invddvCopula,numeric,cqsCopula,numeric-method
 > ### Keywords: classes copula
@@ -1384,7 +1384,7 @@ detaching 'package:sp'
 > ### Name: mixtureCopula-class
 > ### Title: Class '"mixtureCopula"'
 > ### Aliases: mixtureCopula-class dduCopula,ANY,mixtureCopula-method
-> ###   ddvCopula,ANY,mixtureCopula-method fitCopula,mixtureCopula-method
+> ###   ddvCopula,ANY,mixtureCopula-method fitCopula,mixtureCopula,ANY-method
 > ###   invdduCopula,numeric,mixtureCopula,numeric-method
 > ###   invddvCopula,numeric,mixtureCopula,numeric-method
 > ### Keywords: classes
@@ -1534,13 +1534,13 @@ detaching 'package:sp'
 > 
 > uv <- qCopula_u(asCopula(c(-1,1)), p=rep(0.9,10), u=runif(10,0.9,1))
 > pCopula(uv,asCopula(c(-1,1)))-0.9
- [1] -5.285787e-09 -1.979502e-10  7.899040e-09 -5.241861e-09  2.531447e-09
- [6]  8.471355e-09 -6.502292e-09 -1.261782e-09  3.313125e-09  7.337630e-09
+ [1] -6.854504e-09 -2.410827e-09  7.820441e-09  4.006534e-09  1.189353e-09
+ [6]  7.326577e-09  2.424379e-09  5.285333e-09 -4.919274e-09 -2.558232e-09
 > 
 > uv <- qCopula_v(asCopula(c(-1,1)), p=rep(0.9,10), v=runif(10,0.9,1))
 > pCopula(uv,asCopula(c(-1,1)))-0.9
- [1] -1.033849e-09  4.513519e-09  8.776860e-09  2.134065e-09  3.399305e-09
- [6]  4.947090e-09  2.469908e-10  4.513539e-09  6.891024e-09 -3.606405e-09
+ [1]  1.414896e-08  2.142035e-09 -4.321133e-09  8.461797e-09 -7.768893e-09
+ [6] -1.606910e-08 -1.162496e-08 -3.348833e-10  1.726091e-09 -1.168865e-09
 > 
 > 
 > 
@@ -1964,7 +1964,7 @@ detaching 'package:sp'
 > ### Name: spVineCopula-class
 > ### Title: Class '"spVineCopula"'
 > ### Aliases: spVineCopula-class mixedSpVineCopula-class
-> ###   pureSpVineCopula-class fitCopula,spVineCopula-method
+> ###   pureSpVineCopula-class fitCopula,spVineCopula,ANY-method
 > ### Keywords: classes
 > 
 > ### ** Examples
@@ -2313,7 +2313,7 @@ detaching 'package:spacetime', 'package:sp'
 > 
 > ### Name: stVineCopula-class
 > ### Title: Class '"stVineCopula"'
-> ### Aliases: stVineCopula-class fitCopula,stVineCopula-method
+> ### Aliases: stVineCopula-class fitCopula,stVineCopula,ANY-method
 > ### Keywords: classes
 > 
 > ### ** Examples
@@ -2434,6 +2434,74 @@ Class "Copula", by class "evCopula", distance 4
 > 
 > 
 > cleanEx()
+> nameEx("trunCopula-class")
+> ### * trunCopula-class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: trunCopula-class
+> ### Title: Class '"trunCopula"'
+> ### Aliases: trunCopula-class fitCopula,trunCopula,matrix-method
+> ###   qCopula_v,trunCopula-method rCopula_y,numeric,trunCopula-method
+> ### Keywords: classes
+> 
+> ### ** Examples
+> 
+> showClass("trunCopula")
+Class "trunCopula" [package "spcopula"]
+
+Slots:
+                                                                       
+Name:    trunFamily      contPar       .tools    dimension   parameters
+Class:       copula      numeric         list      integer      numeric
+                                                          
+Name:   param.names param.lowbnd  param.upbnd     fullname
+Class:    character      numeric      numeric    character
+
+Extends: 
+Class "copula", directly
+Class "parCopula", by class "copula", distance 2
+Class "Copula", by class "copula", distance 3
+> 
+> 
+> 
+> cleanEx()
+> nameEx("trunCopula")
+> ### * trunCopula
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: trunCopula
+> ### Title: Constructor of the truncated copula class.
+> ### Aliases: trunCopula
+> 
+> ### ** Examples
+> 
+> 
+> cop <- trunCopula(gumbelCopula(3), 1.2)
+> cop
+truncated Gumbel copula, dim. d = 2 
+Dimension:  2 
+Parameters:
+  param        = 3.0
+  truncation   = 1.2
+> 
+> smpl <- rCopula(100, cop)
+> 
+> par(mfrow=c(2,2), mai=c(0.4,0.4,0.4,0.4))
+> plot(smpl,asp=1, main="sample")
+> 
+> contour(cop, pCopula, asp=1, main="CDF", n=201)
+> points(rCopula_y(0.4, cop, 10), col="red")
+> 
+> # too few points, but faster for package compilation
+> kenCop <- getKendallDistr(cop, smpl)
+> curve(kenCop, main="Kendall function", asp=1)
+> 
+> 
+> 
+> graphics::par(get("par.postscript", pos = 'CheckExEnv'))
+> cleanEx()
 > nameEx("unitScatter")
 > ### * unitScatter
 > 
@@ -2456,7 +2524,7 @@ Class "Copula", by class "evCopula", distance 4
 > ###
 > options(digits = 7L)
 > base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
-Time elapsed:  12.88 0.41 14.08 NA NA 
+Time elapsed:  13.34 0.31 14.62 NA NA 
 > grDevices::dev.off()
 null device 
           1 

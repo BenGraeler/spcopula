@@ -4,7 +4,7 @@
 \alias{spVineCopula-class}
 \alias{mixedSpVineCopula-class}
 \alias{pureSpVineCopula-class}
-\alias{fitCopula,spVineCopula-method}
+\alias{fitCopula,spVineCopula,ANY-method}
 
 \title{Class \code{"spVineCopula"}}
 \description{

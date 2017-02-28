@@ -99,10 +99,9 @@ criticalTriple <- function(copula, cl, u, ind, tol=sqrt(.Machine$double.eps)) {
         })
 }
 
-qCopula_u <- function(copula, p, u, tol=.Machine$double.eps^.5) { # sample=NULL
+qCopula_u.def <- function(copula, p, u, tol=.Machine$double.eps^.5) { # sample=NULL
   copDim <- dim(copula)
-  if(length(p) != length(u)) 
-    stop("Length of p and u differ!")
+  stopifnot(length(p) == length(u)) 
   
   if (copDim == 2) {
     res <- sapply(1:length(p), 
@@ -111,19 +110,19 @@ qCopula_u <- function(copula, p, u, tol=.Machine$double.eps^.5) { # sample=NULL
                       return(NA)
                     if (u[ind] == 1)
                       return(p[ind])
-                    optimize(function(v) abs(pCopula(cbind(u[ind], v), copula) - p[ind]),
+                    optimise(function(v) abs(pCopula(cbind(u[ind], v), copula) - p[ind]),
                              c(p[ind], 1 + p[ind] - u[ind]), tol=tol)$minimum
                   })
   } else {
   res < NULL
     for(i in 1:length(p)) { # i <- 1
       if (u[i] < p[i]) {
-        params <- rbind(params,rep(NA,dim-1))
+        res <- rbind(res, rep(NA,dim-1))
       } else {
         opt <- optim(par=rep(p[i],dim-1), 
                      function(vw) abs(pCopula(c(u[i],vw), copula)-p[i]), 
                      lower=rep(p[i],dim-1), upper=rep(1,dim-1), method="L-BFGS-B")
-        params <- rbind(params, opt$par)
+        res <- rbind(res, opt$par)
       }
     }
   }
@@ -131,46 +130,46 @@ qCopula_u <- function(copula, p, u, tol=.Machine$double.eps^.5) { # sample=NULL
   return(cbind(u, res))
 }
 
-setGeneric("qCopula_u")
+setGeneric("qCopula_u", function(copula, p, u, ...) standardGeneric("qCopula_u"))
+setMethod("qCopula_u", signature("copula"), qCopula_u.def)
 
-# setMethod("qCopula_u", signature("copula"), qCopula_u.def)
 
-
-setGeneric("qCopula_v",function(copula,p,v,...) {standardGeneric("qCopula_v")})
-
-qCopula_v.def <- function(copula,p,v, tol=.Machine$double.eps^.5) { # sample=NULL
-  dim <- copula@dimension
-  if(length(p) != length(v)) stop("Length of p and v differ!")
+qCopula_v.def <- function(copula, p, v, tol=.Machine$double.eps^.5) {
+  copDim <- dim(copula)
+  if(length(p) != length(v)) 
+    stop("Length of p and u differ!")
   
-  params <- NULL
-  for(i in 1:length(p)) { # i <- 1
-    if (v[i] < p[i]) {
-      params <- rbind(params,rep(NA,dim-1))
-    } else {
-      if (dim == 2) {
-        params <- rbind(params, 
-                        optimize(function(u) abs(pCopula(cbind(u, rep(v[i],length(u))),copula)-p[i]),
-                                 c(p,1), tol=tol)$minimum)
+  if (copDim == 2) {
+    res <- sapply(1:length(p), 
+                  function(ind) {
+                    if (v[ind] < p[ind]) 
+                      return(NA)
+                    if (v[ind] == 1)
+                      return(p[ind])
+                    optimise(function(u) abs(pCopula(cbind(u, v[ind]), copula) - p[ind]),
+                             c(p[ind], 1 + p[ind] - v[ind]), tol=tol)$minimum
+                  })
+    res <- cbind(res, v)
+  } else {
+    res < NULL
+    for(i in 1:length(p)) { # i <- 1
+      if (v[i] < p[i]) {
+        res <- rbind(res,rep(NA,dim-1))
       } else {
         opt <- optim(par=rep(p[i],dim-1), 
-                     function(uw) abs(pCopula(c(uw[1],v[i],uw[2]), copula)-p[i]), 
+                     function(uw) abs(pCopula(c(uw[1], v[i], uw[2]), copula)-p[i]), 
                      lower=rep(p[i],dim-1), upper=rep(1,dim-1), method="L-BFGS-B")
-        params <- rbind(params, opt$par)
+        res <- rbind(res, opt$par)
       }
     }
+    
+    res <- cbind(res[,1], v, res[,2])
   }
   
-  if (dim == 2) {
-    return(cbind(params,v))
-  } else {
-    if (is.matrix(params))
-      return(cbind(params[,1], v, params[,2]))
-    else
-      return(cbind(params[1], v, params[2]))
-  }
-  
+  return(res)
 }
 
+setGeneric("qCopula_v", function(copula, p, v, ...) standardGeneric("qCopula_v"))
 setMethod("qCopula_v", signature("copula"), qCopula_v.def)
 
 

@@ -4,7 +4,7 @@
 \alias{mixtureCopula-class}
 \alias{dduCopula,ANY,mixtureCopula-method}
 \alias{ddvCopula,ANY,mixtureCopula-method}
-\alias{fitCopula,mixtureCopula-method}
+\alias{fitCopula,mixtureCopula,ANY-method}
 \alias{invdduCopula,numeric,mixtureCopula,numeric-method}
 \alias{invddvCopula,numeric,mixtureCopula,numeric-method}
 

@@ -159,11 +159,6 @@ rCop_y <- function(y, copula, n=1, n.disc = 1e2) {
       smpl[boolLower,] <- qCopula_u(copula, rep(y, sum(boolLower)), appConPoint[boolLower, 1])
       smpl[!boolLower,] <- qCopula_v(copula, rep(y, sum(!boolLower)), appConPoint[!boolLower, 2])
     }
-    
-    # plot(uv, type="l", xlim=c(uv[dSeqInt+c(0,1)]+c(-1,1)/1000), asp=1)
-    # points(uv[dSeqInt+c(0,1),], col=c("red", "purple"))
-    # points(matrix(appConPoint, nrow = 1), col="green")
-    # points(matrix(smpl, nrow = 1), col="green", pch=2)
   }
 
   return(smpl)  
