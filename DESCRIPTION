@@ -13,7 +13,7 @@ LazyLoad: yes
 Depends: copula (>= 0.999-15), R (>= 3.1.0), VineCopula (>= 2.0.4)
 Imports: methods, sp, spacetime (>= 1.0-9)
 Suggests: evd
-URL: http://r-forge.r-project.org/projects/spcopula/
+URL: https://github.com/bengraeler/spcopula
 Collate:
   Classes.R
   empiricalCopula.R
@@ -37,4 +37,5 @@ Collate:
   KendallDistribution.R
   hkCopula.R
   trunCopula.R
+  spGeometric.R
   zzz.R

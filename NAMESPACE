@@ -10,7 +10,7 @@ importFrom("stats", "D", "approxfun", "cor", "ecdf", "integrate", "lm",
 importFrom("utils", "setTxtProgressBar", "txtProgressBar", "tail", "capture.output", "str")
 
 importMethodsFrom(VineCopula, fitCopula)
-importMethodsFrom(VineCopula, dduCopula,ddvCopula)
+importMethodsFrom(VineCopula, dduCopula, ddvCopula)
 
 importFrom(VineCopula, BB1Copula, surBB1Copula, r90BB1Copula, r270BB1Copula)
 importFrom(VineCopula, BB6Copula, surBB6Copula, r90BB6Copula, r270BB6Copula)
@@ -40,7 +40,7 @@ importClassesFrom(VineCopula, vineCopula)
 # constructor
 export(asCopula, cqsCopula)
 export(tawn3pCopula)
-export(spCopula, stCopula)
+export(spCopula, stCopula, spGeomCopula)
 export(spVineCopula, stVineCopula)
 export(stCoVarVineCopula)
 export(neighbourhood, stNeighbourhood)
@@ -82,7 +82,7 @@ export(kendall)
 
 ## classes
 exportClasses(asCopula, cqsCopula, tawn3pCopula, neighbourhood, stNeighbourhood, empiricalCopula, empSurCopula)
-exportClasses(spCopula, stCopula, spVineCopula, stVineCopula)
+exportClasses(spCopula, stCopula, spVineCopula, stVineCopula, spGeomCopula)
 exportClasses(stCoVarVineCopula)
 exportClasses(mixtureCopula)
 exportClasses(hkCopula)

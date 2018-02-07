@@ -79,7 +79,12 @@ setClass("hkCopula",
 
 validSpCopula <- function(object) {
   if (length(object@components) != length(object@distances)) 
-    return("Length of components does not equal length of distances. \n Note: The last distance must give the range and it is automatically associated with the indepenence copula.")
+    return("Length of components does not equal length of distances. \n Note: The last distance is interpreted as the range and every pair beyond the range is modelled via the last opula in components.")
+  if (is.unsorted(object@distances, strictly = T))
+    return("Distances have to be strictly increasing.")
+  if (min(object@distances) > 0)
+    return("The distance vector must contain 0.")
+  
   check.upper <- NULL
   check.lower <- NULL
   
@@ -107,6 +112,7 @@ validSpCopula <- function(object) {
                                         paste(sapply(object@components[check.lower], function(x) describeCop(x, "very short")), 
                                               "at", object@distances[check.lower],collapse="\n")))
   }
+  
   return(TRUE)
 }
 
@@ -225,3 +231,22 @@ setClass("stNeighbourhood",
                                          prediction="logical"),
          validity = validStNeighbourhood)
 
+## spatial geometric mean copula ##
+###################################
+
+validSpGeomCopula <- function(object) {
+  if (length(object@components) != length(object@distances)) 
+    return("Length of components does not equal length of distances. \n Note: The last distance is interpreted as the range and every pair beyond the range is modelled via the last opula in components.")
+  if (is.unsorted(object@distances, strictly = T))
+    return("Distances have to be strictly increasing.")
+  if (min(object@distances) > 0)
+    return("The distance vector must contain 0.")
+  
+  return(TRUE)
+}
+
+setClass("spGeomCopula", representation = representation("copula", 
+                                                         components="list",
+                                                         distances="numeric", 
+                                                         unit="character"),
+         validity = validSpGeomCopula, contains = list("copula"))

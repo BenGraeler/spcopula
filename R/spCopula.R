@@ -14,7 +14,7 @@
 #                             parameters
 
 
-spCopula <- function(components, distances, spDepFun, unit="m") {
+spCopula <- function(components, distances, spDepFun, unit=NULL) {
   if (missing(spDepFun)) { 
     calibMoa <- function(copula, h) return(NULL)
   } else {
@@ -34,8 +34,6 @@ spCopula <- function(components, distances, spDepFun, unit="m") {
     }
   }
 
-#   components <- append(components,indepCopula())
-  
   param       <- unlist(lapply(components, 
                                function(x) {
                                  if(class(x)=="indepCopula") 
@@ -414,7 +412,7 @@ invddvSpCopula <- function(v, copula, y, h, tol=.Machine$double.eps^0.5) {
   
   nElem <- length(v)
   stopifnot(nElem == length(y))
-  stopifnot(length(h) == 1 | length(h)==nElem)
+  stopifnot(length(h) == 1 | length(h) == nElem)
   
   optFun <- function(u, v, y, h) abs(ddvSpCopula(cbind(u, rep(v, length(u))), copula, h)-y)
   
