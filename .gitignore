@@ -1,4 +1,5 @@
-src/spcopula.dll
+src/*.dll
+src/*.o
 vignettes/spcopula.log
 .Rproj.user
 .Rhistory
