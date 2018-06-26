@@ -48,8 +48,10 @@ colnames(loglikTau$loglik)[bestFitTau]
 
 ## set up a first bivariate spatial Copula
 ###########################################
-spCop <- spCopula(c(families[bestFitTau[1:8]],indepCopula()),
-                  distances=bins$meanDists[1:9],
+spCop <- spCopula(c(normalCopula(1),
+                    families[bestFitTau[1:8]],
+                    indepCopula()),
+                  distances=c(0, bins$meanDists[1:9]),
                   spDepFun=calcKTau, unit="m")
 
 ## estimation neighbourhood for the pure spatial vine copula
@@ -72,8 +74,10 @@ colnames(loglikTau2$loglik)[bestFitTau2]
 
 ## set up the second bivariate spatial Copula
 ##############################################
-spCop2 <- spCopula(c(families[bestFitTau2[1:6]], indepCopula()),
-                   distances=bins2$meanDists[1:7],
+spCop2 <- spCopula(c(normalCopula(1),
+                     families[bestFitTau2[1:6]],
+                     indepCopula()),
+                   distances=c(0, bins2$meanDists[1:7]),
                    spDepFun=calcKTau2, unit="m")
 
 ## third spatial tree
@@ -91,8 +95,10 @@ colnames(loglikTau3$loglik)[bestFitTau3]
 
 ## set up the third bivariate spatial Copula
 #############################################
-spCop3 <- spCopula(c(families[bestFitTau3[1:5]],indepCopula()),
-                   distances=bins3$meanDists[1:6],
+spCop3 <- spCopula(c(normalCopula(1),
+                     families[bestFitTau3[1:5]],
+                     indepCopula()),
+                   distances=c(0, bins3$meanDists[1:6]),
                    spDepFun=calcKTau3, unit="m")
 
 ## fourth spatial tree
@@ -114,8 +120,10 @@ colnames(loglikTau4$loglik)[bestFitTau4]
 
 ## set up the fourth bivariate spatial Copula
 #############################################
-spCop4 <- spCopula(c(families[bestFitTau4[1:3]], normalCopula(0),indepCopula()),
-                   distances=bins4$meanDists[1:5],
+spCop4 <- spCopula(c(normalCopula(1),
+                     families[bestFitTau4[1:3]], normalCopula(0),
+                     indepCopula()),
+                   distances=c(0, bins4$meanDists[1:5]),
                    spDepFun=calcKTau4, unit="m")
 
 ## pure spatial vine
@@ -137,7 +145,7 @@ meuseNeigh <- getNeighbours(dataLocs=meuse, predLocs=meuse, prediction=T,
 ## leave-one-out x-validation
 ##############################
 
-time <- proc.time()  # ~160 s
+time <- proc.time()  # ~40 s
 predMedian <- spCopPredict(meuseNeigh, meuse, meuse, meuseSpVine, margin=list(q=qMar), "quantile")
 predMean <- spCopPredict(meuseNeigh, meuse, meuse, meuseSpVine, margin=list(q=qMar), "expectation")
 proc.time() - time
