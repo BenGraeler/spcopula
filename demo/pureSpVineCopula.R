@@ -48,9 +48,19 @@ colnames(loglikTau$loglik)[bestFitTau]
 
 ## set up a first bivariate spatial Copula
 ###########################################
+<<<<<<< HEAD
 spCop <- spCopula(c(families[bestFitTau[c(1,1:8)]],
                     indepCopula()),
                   distances=c(0, bins$meanDists[1:9]),
+||||||| merged common ancestors
+spCop <- spCopula(c(families[bestFitTau[1:8]],indepCopula()),
+                  distances=bins$meanDists[1:9],
+=======
+spCop <- spCopula(c(normalCopula(1),
+                    families[bestFitTau[1:8]],
+                    indepCopula()),
+                  distances=c(0, bins$meanDists[1:9]),
+>>>>>>> 1f3085781d0efbcc4d44a3b385e3456edfd99978
                   spDepFun=calcKTau, unit="m")
 
 ## estimation neighbourhood for the pure spatial vine copula
@@ -73,9 +83,19 @@ colnames(loglikTau2$loglik)[bestFitTau2]
 
 ## set up the second bivariate spatial Copula
 ##############################################
+<<<<<<< HEAD
 spCop2 <- spCopula(c(families[bestFitTau2[c(1,1:6)]],
                      indepCopula()),
                    distances=c(0, bins2$meanDists[1:7]),
+||||||| merged common ancestors
+spCop2 <- spCopula(c(families[bestFitTau2[1:6]], indepCopula()),
+                   distances=bins2$meanDists[1:7],
+=======
+spCop2 <- spCopula(c(normalCopula(1),
+                     families[bestFitTau2[1:6]],
+                     indepCopula()),
+                   distances=c(0, bins2$meanDists[1:7]),
+>>>>>>> 1f3085781d0efbcc4d44a3b385e3456edfd99978
                    spDepFun=calcKTau2, unit="m")
 
 ## third spatial tree
@@ -93,9 +113,19 @@ colnames(loglikTau3$loglik)[bestFitTau3]
 
 ## set up the third bivariate spatial Copula
 #############################################
+<<<<<<< HEAD
 spCop3 <- spCopula(c(families[bestFitTau3[c(1,1:5)]],
                      indepCopula()),
                    distances=c(0, bins3$meanDists[1:6]),
+||||||| merged common ancestors
+spCop3 <- spCopula(c(families[bestFitTau3[1:5]],indepCopula()),
+                   distances=bins3$meanDists[1:6],
+=======
+spCop3 <- spCopula(c(normalCopula(1),
+                     families[bestFitTau3[1:5]],
+                     indepCopula()),
+                   distances=c(0, bins3$meanDists[1:6]),
+>>>>>>> 1f3085781d0efbcc4d44a3b385e3456edfd99978
                    spDepFun=calcKTau3, unit="m")
 
 ## fourth spatial tree
@@ -117,9 +147,19 @@ colnames(loglikTau4$loglik)[bestFitTau4]
 
 ## set up the fourth bivariate spatial Copula
 #############################################
+<<<<<<< HEAD
 spCop4 <- spCopula(c(families[bestFitTau4[c(1,1:3)]], normalCopula(0),
                      indepCopula()),
                    distances=c(0, bins4$meanDists[1:5]),
+||||||| merged common ancestors
+spCop4 <- spCopula(c(families[bestFitTau4[1:3]], normalCopula(0),indepCopula()),
+                   distances=bins4$meanDists[1:5],
+=======
+spCop4 <- spCopula(c(normalCopula(1),
+                     families[bestFitTau4[1:3]], normalCopula(0),
+                     indepCopula()),
+                   distances=c(0, bins4$meanDists[1:5]),
+>>>>>>> 1f3085781d0efbcc4d44a3b385e3456edfd99978
                    spDepFun=calcKTau4, unit="m")
 
 ## pure spatial vine
