@@ -13,7 +13,7 @@ cor(triples,method="kendall")
 
 # estiamte the BB7 copula by means of maximum likelihood
 copQV <- fitCopula(BB7Copula(param=c(2,14)), peakVol, method="mpl", 
-                   start=c(2,14), estimate.variance=F)@copula
+                   estimate.variance=F)@copula
 copQV
 
 # we use a design return period of 10 years
@@ -42,3 +42,4 @@ kendallRP(kendallFunQV, cl=0.9, mu=1, copula=copQV)
 # illustrating the critical lines (empirically)
 contour(copQV,pCopula,levels=c(0.9,t_KEN2),
         xlim=c(0.8,1), ylim=c(0.8,1), n=100, asp=1, col="blue")
+
