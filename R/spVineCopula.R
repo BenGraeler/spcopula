@@ -226,6 +226,12 @@ spCopPredict.expectation <- function(predNeigh, dataLocs, predLocs, spVine, marg
 }
 
 spCopPredict.quantile <- function(predNeigh, dataLocs, predLocs, spVine, margin, p=0.5) {
+  if (is.numeric(p)) {
+    stopifnot(0 < p & p < 1 )
+  } else {
+    stopifnot(p == "random")
+  }
+    
   dists <- calcSpTreeDists(predNeigh, dataLocs, length(spVine@spCop))
   
   predQuantile <- NULL
@@ -239,10 +245,15 @@ spCopPredict.quantile <- function(predNeigh, dataLocs, predLocs, spVine, margin,
     density <- condSecVine(xVals)
     nx <- length(xVals)
     int <- cumsum(c(0,diff(xVals)*(0.5*diff(density)+density[-nx])))
-    lower <- max(which(int <= p))
+    if (is.numric(p)) {
+      pVal <- p
+    } else {
+      pVal <- runif(1)
+    }
+    lower <- max(which(int <= pVal))
     m <- (density[lower+1]-density[lower])/(xVals[lower+1]-xVals[lower])
     b <- density[lower]
-    xRes <- -b/m+sign(m)*sqrt(b^2/m^2+2*(p-int[lower])/m)
+    xRes <- -b/m+sign(m)*sqrt(b^2/m^2+2*(pVal-int[lower])/m)
     
     predQuantile <- c(predQuantile, margin$q(xVals[lower]+xRes))
   }
@@ -250,11 +261,11 @@ spCopPredict.quantile <- function(predNeigh, dataLocs, predLocs, spVine, margin,
   
   if ("data" %in% slotNames(predLocs)) {
     res <- predLocs
-    res@data[[paste("quantile.",p,sep="")]] <- predQuantile
+    res@data[[paste0("quantile.",p)]] <- predQuantile
     return(res)
   } else {
     predQuantile <- data.frame(predQuantile)
-    colnames(predQuantile) <- paste("quantile.",p,sep="")
+    colnames(predQuantile) <- paste0("quantile.",p)
     return(addAttrToGeom(predLocs, predQuantile, match.ID=FALSE))
   }
 }
