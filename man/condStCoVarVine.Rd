@@ -2,7 +2,7 @@
 \alias{condStCoVarVine}
 
 \title{
-conditional distribution function of spatio-temporal covariate vine copula
+Conditional Distribution Function of Spatio-Temporal Covariate Vine Copula
 }
 \description{
 Returns a conditional distribution function of spatio-temporal covariate vine copula
@@ -47,22 +47,22 @@ library("VineCopula")
 spCopT0 <- spCopula(components=list(claytonCopula(8), claytonCopula(4), 
                                     claytonCopula(2), claytonCopula(1),
                                     claytonCopula(0.5), indepCopula()),
-                    distances=c(100,200,300,400,500,600),
+                    distances=c(0,100,200,300,400,500),
                     unit="km")
 spCopT1 <- spCopula(components=list(claytonCopula(4), claytonCopula(2), 
                                     claytonCopula(1), claytonCopula(0.5),
                                     indepCopula()),
-                    distances=c(100,200,300,400,500),
+                    distances=c(0,100,200,300,400),
                     unit="km")
 spCopT2 <- spCopula(components=list(claytonCopula(2), claytonCopula(1), 
                                     claytonCopula(0.5), indepCopula()),
-                    distances=c(100,200,300,400),
+                    distances=c(0,100,200,300),
                     unit="km")
 
 stCop <- stCopula(components=list(spCopT0, spCopT1, spCopT2),
                   tlags=-(0:2))
 
-# only a constant copula ius used for the covariate
+# only a constant copula is used for the covariate
 stCVVC <- stCoVarVineCopula(function(x) gumbelCopula(7), stCop, vineCopula(5L))
 
 dists <- array(c(150, 250, 150, 250,0,0,-1,-1),dim=c(1,4,2))

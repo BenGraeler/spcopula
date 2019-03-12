@@ -44,7 +44,7 @@ spCop <- spCopula(components=list(normalCopula(0), tCopula(0, dispstr = "un"),
                                   frankCopula(1), normalCopula(0), claytonCopula(0),
                                   claytonCopula(0), claytonCopula(0), claytonCopula(0),
                                   claytonCopula(0), indepCopula()),
-                  distances=bins$meanDists,
+                  distances=c(0, bins$meanDists[1:9]),
                   spDepFun=calcKTauPol, unit="m")
 
 spVineCop <- spVineCopula(spCop, vineCopula(4L))

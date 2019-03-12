@@ -6,7 +6,7 @@ spCop <- spCopula(components=list(normalCopula(), tCopula(),
                                   frankCopula(), normalCopula(), claytonCopula(),
                                   claytonCopula(), claytonCopula(), claytonCopula(),
                                   claytonCopula(), indepCopula()),
-                  distances=bins$meanDists,
+                  distances=c(0, bins$meanDists[1:9]),
                   spDepFun=calcKTauPol, unit="m")
 
 

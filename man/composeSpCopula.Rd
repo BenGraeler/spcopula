@@ -35,7 +35,7 @@ Benedikt Graeler
 
 \examples{
 composeSpCopula(c(1,1,2,3),families=list(frankCopula(.4), gumbelCopula(1.6),gumbelCopula(1.4)),
-                bins=data.frame(meanDists=c(500,1000,1500,2000,2500)),range=2250)
+                bins=data.frame(meanDists=c(0,500,1000,1500,2000)),range=1750)
 }
 
 \keyword{ spatial }
