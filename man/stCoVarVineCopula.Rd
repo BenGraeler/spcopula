@@ -38,7 +38,6 @@ Benedikt Graeler
 
 \examples{
 # a spatio-temporal C-vine copula (with independent copulas in the upper vine)
-library("VineCopula")
 spCopT0 <- spCopula(components=list(claytonCopula(8), claytonCopula(4), 
                                     claytonCopula(2), claytonCopula(1),
                                     claytonCopula(0.5), indepCopula()),
@@ -60,7 +59,3 @@ stCop <- stCopula(components=list(spCopT0, spCopT1, spCopT2),
 # only a constant copula ius used for the covariate
 stCoVarVineCopula(function(x) gumbelCopula(2), stCop, vineCopula(9L))
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

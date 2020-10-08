@@ -245,7 +245,7 @@ spCopPredict.quantile <- function(predNeigh, dataLocs, predLocs, spVine, margin,
     density <- condSecVine(xVals)
     nx <- length(xVals)
     int <- cumsum(c(0,diff(xVals)*(0.5*diff(density)+density[-nx])))
-    if (is.numric(p)) {
+    if (is.numeric(p)) {
       pVal <- p
     } else {
       pVal <- runif(1)

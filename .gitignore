@@ -4,3 +4,4 @@ vignettes/spcopula.log
 .Rproj.user
 .Rhistory
 *.Rproj
+.RData

@@ -243,8 +243,8 @@ ddvCop.spGeomCop <- function(u, copula, h) {
     if (int >= length(copula@components)) {
       tmpPairs <- u[sel,,drop=FALSE]
       copLow <- copula@components[[int]]
-      dCopHigh[sel, ] <- dCopLow[sel,] <- cbind(pCopula(tmpPairs, copLow, ...),
-                                                ddvCopula(tmpPairs, copLow, ...))
+      dCopHigh[sel, ] <- dCopLow[sel,] <- cbind(pCopula(tmpPairs, copLow),
+                                                ddvCopula(tmpPairs, copLow))
       
       p[sel] <- 0.5
     } else {
