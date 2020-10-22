@@ -2,7 +2,7 @@ Package: spcopula
 Type: Package
 Title: Copula Driven Analysis - Multivariate, Spatial, Spatio-Temporal
 Version: 0.2-5
-Date: 2020-10-08
+Date: 2020-10-22
 Authors@R: c(person("Benedikt", "Graeler", role = c("aut", "cre"),
                     email = "b.graeler@52north.org"),
              person("Marius", "Appel",role = "ctb"))

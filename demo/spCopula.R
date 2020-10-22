@@ -35,23 +35,21 @@ curve(calcKTauLin,0, 1000, col="red",add=TRUE)
 calcKTauPol <- fitCorFun(bins, degree=3)
 curve(calcKTauPol,0, 1000, col="purple",add=TRUE)
 
+copCandidates <- c(normalCopula(0.2), tCopula(0.2),
+                   claytonCopula(0.2), frankCopula(1.2), 
+                   gumbelCopula(1.2), joeBiCopula(1.5),
+                   indepCopula())
+
 ## find best fitting copula per lag class
 loglikTau <- loglikByCopulasLags(bins, meuse, calcKTauPol,
-                                 families=c(normalCopula(0), tCopula(0),
-                                            claytonCopula(0), frankCopula(1), 
-                                            gumbelCopula(1), joeBiCopula(1.5),
-                                            indepCopula()))
+                                 families = copCandidates)
 bestFitTau <- apply(apply(loglikTau$loglik, 1, rank, na.last=T), 2, 
                     function(x) which(x==7))
 colnames(loglikTau$loglik)[bestFitTau]
 
 ## set-up a spatial Copula ##
-spCop <- spCopula(components=list(normalCopula(0), tCopula(0),
-                                  normalCopula(1), tCopula(0), 
-                                  claytonCopula(0), claytonCopula(0),
-                                  claytonCopula(0), claytonCopula(0),
-                                  claytonCopula(0), indepCopula()),
-                  distances=bins$meanDists,
+spCop <- spCopula(components = c(copCandidates[bestFitTau[1]], copCandidates[bestFitTau]),
+                  distances=c(0, bins$meanDists),
                   spDepFun=calcKTauPol, unit="m")
 
 ## compare spatial copula loglik by lag:
