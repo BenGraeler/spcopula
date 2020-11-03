@@ -12,7 +12,7 @@ spplot(meuse,"zinc", col.regions=bpy.colors(5))
 hist(meuse[["zinc"]],freq=F,n=30,ylim=c(0,0.0035), 
      main="Histogram of zinc", xlab="zinc concentration")
 
- #gevEsti <- fgev(meuse[["zinc"]])$estimate
+#gevEsti <- fgev(meuse[["zinc"]])$estimate
 meanLog <- mean(log(meuse[["zinc"]]))
 sdLog <- sd(log(meuse[["zinc"]]))
 # curve(dgev(x,gevEsti[1], gevEsti[2], gevEsti[3]),add=T,col="red")
@@ -34,7 +34,7 @@ bins <- calcBins(meuse, var="rtZinc", nbins=10, cutoff=800)
 
 ## calculate parameters for Kendall's tau function ##
 calcKTau <- fitCorFun(bins, degree=2)
-curve(calcKTau,0, 1000, col="purple",add=T)
+curve(calcKTau, 0, 1000, col="purple",add=T)
 
 families <- list(normalCopula(0.3), tCopula(0.3,df=2.15), claytonCopula(0.3),
                  gumbelCopula(2), frankCopula(1), joeBiCopula(1.5),
@@ -43,7 +43,7 @@ families <- list(normalCopula(0.3), tCopula(0.3,df=2.15), claytonCopula(0.3),
 ## find best fitting copula per lag class
 loglikTau <- loglikByCopulasLags(bins, meuse, families, calcKTau)
 bestFitTau <- apply(apply(loglikTau$loglik, 1, rank, na.last=T), 2, 
-                    function(x) which(x==9))
+                    function(x) which(x==length(families)))
 colnames(loglikTau$loglik)[bestFitTau]
 
 ## set up a first bivariate spatial Copula
@@ -63,12 +63,12 @@ meuseNeigh1 <- getNeighbours(dataLocs=meuse,var="rtZinc",size=vineDim)
 meuseNeigh2 <- dropSpTree(meuseNeigh1, meuse, spCop)
 bins2 <- calcBins(meuseNeigh2, "rtZinc", boundaries=c(0,2:15)*50, plot=F)
 points(bins2$meanDists, bins2$lagCor, pch=2)
-calcKTau2 <- fitCorFun(bins2, degree=3,cutoff=500)
+calcKTau2 <- fitCorFun(bins2, degree=3,cutoff=500, bounds = c(0.001,1))
 curve(calcKTau2,0, 800, col="green",add=TRUE)
 
 loglikTau2 <- loglikByCopulasLags(bins2, families = families, calcCor =  calcKTau2)
 bestFitTau2 <- apply(apply(loglikTau2$loglik, 1, rank, na.last=T), 2, 
-                    function(x) which(x==9))
+                     function(x) which(x==length(families)))
 colnames(loglikTau2$loglik)[bestFitTau2]
 
 ## set up the second bivariate spatial Copula
@@ -83,7 +83,7 @@ spCop2 <- spCopula(c(families[bestFitTau2[c(1,1:6)]],
 meuseNeigh3 <- dropSpTree(meuseNeigh2, meuse, spCop2)
 bins3 <- calcBins(meuseNeigh3, "rtZinc", plot=F)
 points(bins3$meanDists, bins3$lagCor, pch=3)
-calcKTau3 <- fitCorFun(bins3, degree=1, cutoff=500)
+calcKTau3 <- fitCorFun(bins3, degree=1, cutoff=500, bounds=c(0.001,1))
 curve(calcKTau3, 0, 500, col="red", add=TRUE)
 
 loglikTau3 <- loglikByCopulasLags(bins3, families = families, calcCor = calcKTau3)
@@ -103,7 +103,7 @@ spCop3 <- spCopula(c(families[bestFitTau3[c(1,1:5)]],
 meuseNeigh4 <- dropSpTree(meuseNeigh3, meuse, spCop3)
 bins4 <- calcBins(meuseNeigh4, "rtZinc", plot=F)
 points(bins4$meanDists, bins4$lagCor, pch=4)
-calcKTau4 <- fitCorFun(bins4, degree=1,cutoff=400)
+calcKTau4 <- fitCorFun(bins4, degree=1, cutoff=400, bounds=c(0.001, 1))
 curve(calcKTau4,0, 500, col="blue",add=TRUE)
 
 legend("topright",c("1. spatial cop.", "2. spatial cop.",
@@ -160,6 +160,9 @@ abline(0,1)
 
 plot(predMedian$quantile.0.5, meuse$zinc,asp=1)
 abline(0,1)
+
+spplot(predMean, "expect")
+spplot(predMedian, "quantile.0.5")
 
 boxplot(predMean@data[c("zinc","expect")])
 boxplot(predMedian@data[c("zinc","quantile.0.5")])
