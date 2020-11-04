@@ -1,8 +1,8 @@
-## librarys ##
-library("VineCopula")
+## libraries ##
+# library("VineCopula")
 library("sp")
 par(mfrow=c(1,1))
-## meuse - spatial poionts data.frame ##
+## meuse - spatial points data.frame ##
 data("meuse")
 coordinates(meuse) = ~x+y
 
