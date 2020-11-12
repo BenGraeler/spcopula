@@ -1,4 +1,3 @@
-library("VineCopula")
 library("spcopula")
 data("simulatedTriples")
 
@@ -18,10 +17,10 @@ gumbelCop <- fitCopula(gumbelCopula(2),rtPair)@copula
 tdfGumbel <- bivJointDepFun(gumbelCop)
 curve(tdfGumbel,add=T, col="blue",n=500)
 
-BB6Cop <- fitCopula(BB6Copula(), rtPair)@copula
+BB6Cop <- fitCopula(BB6Copula(c(5,2)), rtPair)@copula
+
 tdfBB6 <- bivJointDepFun(BB6Cop)
 curve(tdfBB6, add=T,col="red",n=500)
-
 legend("bottomright",
        c("empirical", "Gaussian", "Gumbel", "BB6"),
        col=c("black", "green", "blue", "red"), lty=1)
