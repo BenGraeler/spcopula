@@ -1,5 +1,3 @@
-library("VineCopula")
-
 ## get the data
 data("simulatedTriples")
 
@@ -12,8 +10,7 @@ plot(peakVol, asp=1)
 cor(triples,method="kendall")
 
 # estiamte the BB7 copula by means of maximum likelihood
-copQV <- fitCopula(BB7Copula(param=c(2,14)), peakVol, method="mpl", 
-                   estimate.variance=F)@copula
+copQV <- fitCopula(BB7Copula(param=c(2,14)), peakVol)@copula
 copQV
 
 # we use a design return period of 10 years

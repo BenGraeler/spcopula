@@ -39,7 +39,7 @@ Benedikt Graeler
 }
 \examples{
 library("sp")
-library("VineCopula")
+
 data("meuse.grid")
 coordinates(meuse.grid) <- ~x+y
 gridded(meuse.grid) <- TRUE

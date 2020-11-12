@@ -135,7 +135,7 @@ setGeneric("calcBins", function(data, var, nbins=15, boundaries=NA, cutoff=NA,
 ## calculating the spatial bins
 ################################
 
-calcSpBins <- function(data, var, nbins=15, boundaries=NA, cutoff=NA, ...,
+calcSpBins <- function(data, var, nbins=15, boundaries=NA, cutoff=NA, 
                        cor.method="fasttau", plot=TRUE) {
 
   if(is.na(cutoff)) {
@@ -164,11 +164,10 @@ calcSpBins <- function(data, var, nbins=15, boundaries=NA, cutoff=NA, ...,
     
   if(plot) { 
     plot(mDists, lagCor, xlab="distance",ylab=paste("correlation [",cor.method,"]",sep=""), 
-         ylim=1.05*c(-abs(min(lagCor)),max(lagCor)), xlim=c(0,max(mDists)))
+         ylim=1.05*c(-abs(min(lagCor)), max(lagCor)), xlim=c(0,max(mDists)))
     abline(h=c(-min(lagCor),0,min(lagCor)),col="grey")
   }
   
-#   res <- list(np=np, meanDists = mDists, lagCor=lagCor, lagData=lagData, lags=lags)
   res <- list(np=np, meanDists = mDists, lagCor=lagCor, lags=lags)
   attr(res,"cor.method") <- cor.method
   attr(res,"variable") <- var

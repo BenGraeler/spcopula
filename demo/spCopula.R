@@ -1,7 +1,7 @@
-## librarys ##
+## libraries ##
 library("sp")
-
-## meuse - spatial poionts data.frame ##
+4
+## meuse - spatial points data.frame ##
 data("meuse")
 coordinates(meuse) = ~x+y
 
@@ -35,46 +35,45 @@ curve(calcKTauLin,0, 1000, col="red",add=TRUE)
 calcKTauPol <- fitCorFun(bins, degree=3)
 curve(calcKTauPol,0, 1000, col="purple",add=TRUE)
 
+copCandidates <- c(normalCopula(0.2), tCopula(0.2),
+                   claytonCopula(0.2), frankCopula(1.2), 
+                   gumbelCopula(1.2), joeBiCopula(1.5),
+                   indepCopula())
+
 ## find best fitting copula per lag class
 loglikTau <- loglikByCopulasLags(bins, meuse, calcKTauPol,
-                                 families=c(normalCopula(0), tCopula(0),
-                                            claytonCopula(0), frankCopula(1), 
-                                            gumbelCopula(1), joeBiCopula(1.5),
-                                            indepCopula()))
+                                 families = copCandidates)
 bestFitTau <- apply(apply(loglikTau$loglik, 1, rank, na.last=T), 2, 
                     function(x) which(x==7))
 colnames(loglikTau$loglik)[bestFitTau]
 
 ## set-up a spatial Copula ##
-spCop <- spCopula(components=list(normalCopula(0), tCopula(0),
-                                  normalCopula(1), tCopula(0), 
-                                  claytonCopula(0), claytonCopula(0),
-                                  claytonCopula(0), claytonCopula(0),
-                                  claytonCopula(0), indepCopula()),
-                  distances=bins$meanDists,
+spCop <- spCopula(components = c(copCandidates[bestFitTau[1]], copCandidates[bestFitTau]),
+                  distances=c(0, bins$meanDists),
                   spDepFun=calcKTauPol, unit="m")
 
 ## compare spatial copula loglik by lag:
 lagData <- lapply(bins$lags, function(x) {
-                               as.matrix((cbind(meuse[x[,1], "marZinc"]@data,
-                                                meuse[x[,2], "marZinc"]@data)))
-                             })
+  as.matrix((cbind(meuse[x[,1], "marZinc"]@data,
+                   meuse[x[,2], "marZinc"]@data)))
+})
 
 spLoglik <- NULL
-for(i in 1:length(bins$lags)) { # i <- 7
+for(i in 1:length(bins$lags)) {
   cat("Lag",i,"\n")
   spLoglik <- c(spLoglik,
                 sum((dCopula(u=lagData[[i]], spCop,log=T,
-                            h=bins$lags[[i]][,3]))))
+                             h=bins$lags[[i]][,3]))))
 }
 
 plot(spLoglik, ylab="log-likelihood", xlim=c(1,11)) 
 points(loglikTau$loglik[cbind(1:10,bestFitTau)], col="green", pch=16)
 points(loglikTau$loglik[,1], col="red", pch=5)
-legend(6, 50,c("Spatial Copula", "best copula per lag", "Gaussian Copula",
-               "number of pairs"), 
-       pch=c(1,16,5,50), col=c("black", "green", "red"))
 text(x=(1:10+0.5), y=spLoglik, lapply(lagData,length))
+legend("topright",
+       c("Spatial Copula", "best copula per lag", "Gaussian Copula",
+         "number of pairs"), 
+       pch=c(1,16,5,50), col=c("black", "green", "red"))
 
 ##
 # spatial vine
@@ -83,24 +82,24 @@ meuseNeigh <- getNeighbours(meuse,var="marZinc",size=vineDim)
 
 vineCop <- vineCopula(4L)
 
-meuseSpVine <- fitCopula(spVineCopula(spCop, vineCop),
-                         list(meuseNeigh, meuse), method="none")
+meuseSpVineFit <- fitCopula(spVineCopula(spCop, vineCop),
+                         list(meuseNeigh, meuse))
 
 # log-likelihood:
-meuseSpVine@loglik
+meuseSpVineFit@loglik
 
-meuseSpVine <- meuseSpVine@copula
+meuseSpVine <- meuseSpVineFit@copula
 
 ##
 # leave-one-out x-validation
-time <- proc.time()  # ~100 s
+time <- proc.time()  # ~25 s
 predMedian <- NULL
 predMean <- NULL
 for(loc in 1:nrow(meuseNeigh@data)) { # loc <- 145
   cat("Location:",loc,"\n")
   condSecVine <- condSpVine(condVar=as.numeric(meuseNeigh@data[loc,-1]), 
-                          dists=list(meuseNeigh@distances[loc,,drop=F]),meuseSpVine)
-
+                            dists=list(meuseNeigh@distances[loc,,drop=F]),meuseSpVine)
+  
   predMedian <- c(predMedian, qMar(optimise(function(x) abs(integrate(condSecVine,0,x)$value-0.5),c(0,1))$minimum))
   
   condExp <-  function(x) {

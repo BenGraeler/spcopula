@@ -1,6 +1,10 @@
 \name{dduCopula}
 \alias{dduCopula}
+\alias{dduCopula,matrix,spGeomCopula-method}
+\alias{dduCopula,numeric,spGeomCopula-method}
 \alias{ddvCopula}
+\alias{ddvCopula,matrix,spGeomCopula-method}
+\alias{ddvCopula,numeric,spGeomCopula-method}
 
 \title{
 partial derivatives of copulas

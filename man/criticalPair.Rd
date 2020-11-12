@@ -43,7 +43,3 @@ Benedikt Graeler
 v <- criticalPair(frankCopula(0.7), 0.9, u=.97, 1)
 pCopula(c(0.97, v),frankCopula(0.7))
 }
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

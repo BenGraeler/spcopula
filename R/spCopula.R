@@ -15,6 +15,11 @@
 
 
 spCopula <- function(components, distances, spDepFun, unit=NULL) {
+  indepCopInComponents <- sapply(components, function(x) class(x) == "indepCopula")
+  if (any(indepCopInComponents)) {
+    components[[which(indepCopInComponents)]] <- normalCopula(0.01)
+  }
+  
   if (missing(spDepFun)) { 
     calibMoa <- function(copula, h) return(NULL)
   } else {

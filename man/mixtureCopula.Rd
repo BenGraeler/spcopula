@@ -20,8 +20,8 @@ An object of class \linkS4class{mixtureCopula}}
 Benedikt Graeler}
 
 \examples{
-cop <- mixtureCopula(c(5,-0.8,2,0.5),
-                     memberCops = list(gumbelCopula(), tCopula()))
+cop <- mixtureCopula(c(5,-0.8,0.5),
+                     memberCops = list(gumbelCopula(), claytonCopula()))
 cop
 
 smpl <- rCopula(100, cop)
@@ -39,4 +39,5 @@ lambda(cop)
 
 # too few points, but faster for package compilation
 kenCop <- getKendallDistr(cop, smpl)
-curve(kenCop, main="Kendall function", asp=1)}
+curve(kenCop, main="Kendall function", asp=1)
+}

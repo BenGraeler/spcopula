@@ -15,11 +15,11 @@ spVineCopula <- function(spCop, topCop=NULL) {
         spCop=spCop)
   else
     new("mixedSpVineCopula", dimension = as.integer(topCop@dimension+length(spCop)),
-      parameters=numeric(), param.names = character(), param.lowbnd = numeric(), 
-      param.upbnd = numeric(), 
-      fullname = paste("Spatial vine copula family with",length(spCop),
-                       "spatial tree(s)."),
-      spCop=spCop, topCop=topCop)
+        parameters=numeric(), param.names = character(), param.lowbnd = numeric(), 
+        param.upbnd = numeric(), 
+        fullname = paste("Spatial vine copula family with",length(spCop),
+                         "spatial tree(s)."),
+        spCop=spCop, topCop=topCop)
 }
 
 # show
@@ -39,7 +39,7 @@ dspVine <- function(u, spCop, topCop, log, h) {
   
   u0 <- u # previous level's conditional data
   for(spTree in 1:length(spCop)) {
-#     cat("[Evaluating spatial tree",spTree,"]\n")
+    #     cat("[Evaluating spatial tree",spTree,"]\n")
     tmpH <- h[[spTree]]
     if(!is.matrix(tmpH)) 
       tmpH <- matrix(tmpH, ncol=length(tmpH))
@@ -87,7 +87,12 @@ setMethod("dCopula",signature=signature("data.frame","spVineCopula"),
           })
 
 # fitting the spatial vine for a given list of spatial copulas
-fitSpVine <- function(copula, data, method="ml", estimate.variance=FALSE) {
+fitSpVine <- function(copula, data, 
+                      method = list(StructureSelect = FALSE,
+                                    indeptest = FALSE,
+                                    familyset = NA,
+                                    indeptest = FALSE),
+                      estimate.variance=FALSE) {
   cat("fitSpVine \n")
   stopifnot(is.list(data))
   stopifnot(length(data)==2)
@@ -97,7 +102,7 @@ fitSpVine <- function(copula, data, method="ml", estimate.variance=FALSE) {
   stopifnot(class(neigh)=="neighbourhood")
   stopifnot(copula@dimension == ncol(neigh@data))
   
-  u0 <- as.matrix(neigh@data) # previous level's (contitional) data
+  u0 <- as.matrix(neigh@data) # previous level's (conditional) data
   h0 <- neigh@distances # previous level's distances
   l0 <- rep(0,nrow(u0)) # spatial density
   for(spTree in 1:length(copula@spCop)) {
@@ -231,7 +236,7 @@ spCopPredict.quantile <- function(predNeigh, dataLocs, predLocs, spVine, margin,
   } else {
     stopifnot(p == "random")
   }
-    
+  
   dists <- calcSpTreeDists(predNeigh, dataLocs, length(spVine@spCop))
   
   predQuantile <- NULL
@@ -245,7 +250,7 @@ spCopPredict.quantile <- function(predNeigh, dataLocs, predLocs, spVine, margin,
     density <- condSecVine(xVals)
     nx <- length(xVals)
     int <- cumsum(c(0,diff(xVals)*(0.5*diff(density)+density[-nx])))
-    if (is.numric(p)) {
+    if (is.numeric(p)) {
       pVal <- p
     } else {
       pVal <- runif(1)

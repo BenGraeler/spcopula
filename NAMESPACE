@@ -1,7 +1,6 @@
 import(copula)
-import(VineCopula)
+import(VC2copula)
 import(sp, spacetime)
-import(methods)
 
 importFrom("graphics", "abline", "smoothScatter")
 importFrom("stats", "D", "approxfun", "cor", "ecdf", "integrate", "lm",
@@ -9,32 +8,18 @@ importFrom("stats", "D", "approxfun", "cor", "ecdf", "integrate", "lm",
            "qnorm", "qt", "quantile", "runif", "uniroot", "var")
 importFrom("utils", "setTxtProgressBar", "txtProgressBar", "tail", "capture.output", "str")
 
-importMethodsFrom(VineCopula, fitCopula)
-importMethodsFrom(VineCopula, dduCopula, ddvCopula)
+# methods
+importFrom(methods,getClassDef)
+importFrom(methods,getSlots,slotNames)
+importFrom(methods,is)
+importFrom(methods,new)
+importFrom(methods,representation)
+importFrom(methods,setClass,validObject)
+importFrom(methods,setMethod)
+importFrom(methods,signature)
 
-importFrom(VineCopula, BB1Copula, surBB1Copula, r90BB1Copula, r270BB1Copula)
-importFrom(VineCopula, BB6Copula, surBB6Copula, r90BB6Copula, r270BB6Copula)
-importFrom(VineCopula, BB7Copula, surBB7Copula, r90BB7Copula, r270BB7Copula)
-importFrom(VineCopula, BB8Copula, surBB8Copula, r90BB8Copula, r270BB8Copula)
-importFrom(VineCopula, joeBiCopula, surJoeBiCopula, r90JoeBiCopula, r270JoeBiCopula)
-importFrom(VineCopula, surClaytonCopula, r90ClaytonCopula, r270ClaytonCopula)
-importFrom(VineCopula, surGumbelCopula, r90GumbelCopula, r270GumbelCopula)
-importFrom(VineCopula, tawnT1Copula, surTawnT1Copula, r90TawnT1Copula, r270TawnT1Copula)
-importFrom(VineCopula, tawnT2Copula, surTawnT2Copula, r90TawnT2Copula, r270TawnT2Copula)
-importFrom(VineCopula, vineCopula)
-importFrom(VineCopula, copulaFromFamilyIndex)
+# VineCopula
 importFrom(VineCopula, TauMatrix, BiCopSelect)
-
-importClassesFrom(VineCopula, BB1Copula, surBB1Copula, r90BB1Copula, r270BB1Copula)
-importClassesFrom(VineCopula, BB6Copula, surBB6Copula, r90BB6Copula, r270BB6Copula)
-importClassesFrom(VineCopula, BB7Copula, surBB7Copula, r90BB7Copula, r270BB7Copula)
-importClassesFrom(VineCopula, BB8Copula, surBB8Copula, r90BB8Copula, r270BB8Copula)
-importClassesFrom(VineCopula, joeBiCopula, surJoeBiCopula, r90JoeBiCopula, r270JoeBiCopula)
-importClassesFrom(VineCopula, surClaytonCopula, r90ClaytonCopula, r270ClaytonCopula)
-importClassesFrom(VineCopula, surGumbelCopula, r90GumbelCopula, r270GumbelCopula)
-importClassesFrom(VineCopula, tawnT1Copula, surTawnT1Copula, r90TawnT1Copula, r270TawnT1Copula)
-importClassesFrom(VineCopula, tawnT2Copula, surTawnT2Copula, r90TawnT2Copula, r270TawnT2Copula)
-importClassesFrom(VineCopula, vineCopula)
 
 
 # constructor
