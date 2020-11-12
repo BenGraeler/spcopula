@@ -61,7 +61,7 @@ pCop.spGeomCop <- function(u, copula, h, ...) {
   resHigh <- numeric(nrow(u))
   p <- numeric(nrow(u))
   
-  pairsInt <- findInterval(h, dists, , left.open = TRUE, rightmost.closed = TRUE)
+  pairsInt <- findInterval(h, dists, left.open = TRUE, rightmost.closed = TRUE)
   
   for (int in unique(pairsInt)) {
     sel <- which(pairsInt == int)

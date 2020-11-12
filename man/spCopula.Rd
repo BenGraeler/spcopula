@@ -7,7 +7,7 @@ Spatial Copula
 Constructor of a bivariate spatial copula \code{\linkS4class{spCopula}}.
 }
 \usage{
-spCopula(components, distances, spDepFun, unit = "m")
+spCopula(components, distances, spDepFun, unit = NULL)
 }
 
 \arguments{
@@ -21,7 +21,7 @@ A vector of the mean distances of the lag classes PLUS the range which will defi
 The spatial dependence function. Typically, the result of \code{\link{fitCorFun}}. If no spatial dependence function is provided, the spatial copula will be a pure linear convex combination of the provided components (i.e. no further fit of their parameters will take place).
 }
   \item{unit}{
-The spatial unit, default: m (meters)
+The spatial unit, default: NULL
 }
 }
 \value{

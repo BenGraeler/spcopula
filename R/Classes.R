@@ -82,8 +82,8 @@ validSpCopula <- function(object) {
     return("Length of components does not equal length of distances. \n Note: The last distance is interpreted as the range and every pair beyond the range is modelled via the last copula in components.")
   if (is.unsorted(object@distances, strictly = T))
     return("Distances have to be strictly increasing.")
-  if (min(object@distances) > 0)
-    return("The distance vector must contain 0.")
+  # if (min(object@distances) > 0)
+  #   return("The distance vector must contain 0.")
   
   check.upper <- NULL
   check.lower <- NULL
