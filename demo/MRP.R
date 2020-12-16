@@ -40,7 +40,7 @@ kendallRP(kendallFunQV, cl=0.9, mu=1, copula=copQV)
 contour(copQV,pCopula,levels=c(0.9,t_KEN2),
         xlim=c(0.8,1), ylim=c(0.8,1), n=100, asp=1, col="blue")
 
-# selecting the most-likely pair on a critcal layer
+# selecting the most-likely pair on a critical layer
 getVonCL <- function(u, cl=t_KEN2) optimize(function(v) (pCopula(cbind(u,v), copQV) - cl)^2, interval = c(cl,1))$minimum
 
 maxCopDensity <- function(cl, copula) {
