@@ -40,3 +40,24 @@ kendallRP(kendallFunQV, cl=0.9, mu=1, copula=copQV)
 contour(copQV,pCopula,levels=c(0.9,t_KEN2),
         xlim=c(0.8,1), ylim=c(0.8,1), n=100, asp=1, col="blue")
 
+# selecting the most-likely pair on a critcal layer
+getVonCL <- function(u, cl=t_KEN2) optimize(function(v) (pCopula(cbind(u,v), copQV) - cl)^2, interval = c(cl,1))$minimum
+
+maxCopDensity <- function(cl, copula) {
+  optU <- optimise(function(u) {
+    v <- sapply(u, function(x) getVonCL(x, cl))
+    -dCopula(cbind(u, v), copula)
+  },
+  interval = c(cl, 1))$minimum
+  optV <- getVonCL(optU, cl)
+  return(c(optU, optV))
+}
+
+mostlikelypairKEN <- maxCopDensity(t_KEN2, copQV)
+mostlikelypairKEN
+
+mostlikelypairCop <- maxCopDensity(0.9, copQV)
+mostlikelypairCop
+
+points(mostlikelypairKEN[1], mostlikelypairKEN[2], col="red")
+points(mostlikelypairCop[1], mostlikelypairCop[2], col="purple")
